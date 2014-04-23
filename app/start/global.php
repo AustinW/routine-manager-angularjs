@@ -81,3 +81,36 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require The Validations File
+|--------------------------------------------------------------------------
+|
+| We need to add the custom validations file.
+|
+*/
+
+require app_path().'/validations.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require the Response Macro File
+|--------------------------------------------------------------------------
+|
+| Response macros are defined in the macros.php file and loaded here
+|
+*/
+
+require app_path().'/macros.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require the Errors File
+|--------------------------------------------------------------------------
+|
+| Error handlers located in app/errors.php
+|
+*/
+
+require app_path().'/errors.php';

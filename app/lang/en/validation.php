@@ -64,6 +64,8 @@ return array(
 	"unique"           => "The :attribute has already been taken.",
 	"url"              => "The :attribute format is invalid.",
 
+	"generic_error"    => "Unable to create/modify the model. Please check errors.",
+
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Language Lines
@@ -75,7 +77,15 @@ return array(
 	|
 	*/
 
-	'custom' => array(),
+	'custom' => array(
+		'athletes' => array(
+			'csv' => 'The :attribute field must contain a comma separated list of athlete ids',
+		),
+		'skills' => array(
+			'skills' => 'The :attribute field must contain an array of valid skills.',
+			'count'  => 'The :attribute field must contain :count items.',
+		),
+	),
 
 	/*
 	|--------------------------------------------------------------------------

@@ -1,62 +1,54 @@
-angular.module("myApp",['ngResource','ngSanitize', 'ngRoute', 'ui.bootstrap', 'ui.router'])
+'use strict';
 
-	.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',function($stateProvider, $urlRouterProvider, $locationProvider){
+angular.module('myApp', [
+    'ngResource',
+    'ngSanitize',
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.router',
 
-		$locationProvider.html5Mode(true);
+    'routineManager.controllers',
+    'routineManager.services',
+    'routineManager.directives',
+    'routineManager.providers',
+])
+    .config(['$routeProvider', '$locationProvider', '$urlRouterProvider',
 
-		$urlRouterProvider.otherwise("/");
+        function($routeProvider, $locationProvider, $urlRouterProvider) {
+            console.log("Initializing router...");
 
-		// Now set up the states
-		$stateProvider
-			.state('home', {
-				url: "/",
-				templateUrl: "app/views/home.html",
-				controller: 'homeController'
-			})
-			.state('movie', {
-				url: "/movie",
-				templateUrl: "app/views/movie.html",
-				controller: 'movieController'
-			})
-			.state('login', {
-				url: "/login",
-				templateUrl: "app/views/login.html",
-				controller: 'loginController'
-			})
-			.state('register', {
-				url: "/register",
-				templateUrl: "app/views/register.html",
-				controller: 'registerController'
-			})
+            $routeProvider.when('/athletes', {
+                templateUrl: 'app/views/athletes.html',
+                controller: 'AthleteListCtrl'
+            });
 
-	}])
+            $locationProvider.html5Mode(true);
 
-	.config(function($httpProvider){
+            $urlRouterProvider.otherwise("/");
+        }
+    ])
+    .config(function($httpProvider) {
+        var interceptor = function($rootScope, $location, $q, Flash) {
+            console.log('Registering interceptor...');
+            var success = function(response) {
+                return response;
+            }
 
-		var interceptor = function($rootScope,$location,$q,Flash){
-		var success = function(response){
-			return response
-		}
+            var error = function(response) {
+                if (response.status = 401) {
+                    delete sessionStorage.authenticated
+                    $location.path('/login')
+                    Flash.show(response.data.flash)
+                }
+                return $q.reject(response)
+            }
+            return function(promise) {
+                return promise.then(success, error)
+            }
+        }
+        $httpProvider.responseInterceptors.push(interceptor)
 
-		var error = function(response){
-			if (response.status = 401){
-				delete sessionStorage.authenticated
-				$location.path('/')
-				Flash.show(response.data.flash)
-			}
-			return $q.reject(response)
-		}
-			return function(promise){
-				return promise.then(success, error)
-			}
-		}
-		$httpProvider.responseInterceptors.push(interceptor)
-
-	})
-
-	.run(function($rootScope, $http, CSRF_TOKEN){
-
-		$http.defaults.headers.common['csrf_token'] = CSRF_TOKEN;
-
-
-	})
+    })
+    .run(function($rootScope, $http, CSRF_TOKEN) {
+        $http.defaults.headers.common['csrf_token'] = CSRF_TOKEN;
+    })

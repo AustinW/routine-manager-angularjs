@@ -19,7 +19,12 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-	//
+	// Note that you cannot use wildcard domains when doing CORS with Authorization!
+	$response->headers->set('Access-Control-Allow-Origin', '*');
+	$response->headers->set('Access-Control-Allow-Credentials', 'true');
+    $response->headers->set('Access-Control-Allow-Headers', 'X-Requested-With, Authorization, Cache-Control, Content-Type');
+    
+    return $response;
 });
 
 /*
@@ -50,7 +55,7 @@ Route::filter('serviceCSRF',function(){
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::guest('login');
+	if (Auth::guest()) return Response::apiError('You must be logged in before accessing this resource.', 401);
 });
 
 

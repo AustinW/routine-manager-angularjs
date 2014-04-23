@@ -11,13 +11,139 @@
 |
 */
 
+Route::get('test-pdf', function() {
+
+	$pdfdf = App::make('pdfdf');
+	$athlete = Athlete::with('synchroPartner')->find(1);
+	$trc = new Compcard\TrampolineCompcard($pdfdf, $athlete, new Compcard\TrampolineCompcardMapper);
+	$trc->generate();
+
+	$dmt = new Compcard\DoubleminiCompcard($pdfdf, $athlete, new Compcard\DoubleminiCompcardMapper);
+	$dmt->generate();
+
+	$tum = new Compcard\TumblingCompcard($pdfdf, $athlete, new Compcard\TumblingCompcardMapper);
+	$tum->generate();
+
+	$syn = new Compcard\SynchroCompcard($pdfdf, $athlete, new Compcard\SynchroCompcardMapper);
+	$syn->generate();
+
+	Zipper::make('austin-white-compcards.zip')->folder($athlete->name())->add(array(
+		$trc->getPdfFileName(),
+		$dmt->getPdfFileName(),
+		$tum->getPdfFileName(),
+		$syn->getPdfFileName()
+	));
+});
+
+Route::get('create-athlete', function() {
+
+	$athlete = new Athlete([
+		'usag_id' => '476333',
+		'first_name' => 'Dalainey',
+		'last_name' => 'Glowacki',
+		'gender' => 'female',
+		'birthday' => '1993-12-15',
+		'tumbling_level' => '9',
+		'notes' => '',
+		'created_at' => '2013-12-26 15:37:17',
+		'updated_at' => '2013-12-26 15:37:17',
+	]);
+
+	$athlete = Auth::user()->athletes()->save($athlete);
+
+	dd(Auth::user()->athletes()->get());
+});
+
+// Route::put('athletes/{athleteId}/{event}/{routineId}', 'AthletesController@putAssociate');
+
+// Route::controller('account', 'AccountController');
+
+// Route::resource('user', 'UserController');
+
+// Route::resource('athletes', 'AthletesController');
+
+// Route::resource('routines', 'RoutinesController');
+
+// Route::resource('trampoline', 'EventControllers\TrampolineController');
+
+// Route::resource('doublemini', 'EventControllers\DoubleMiniController');
+
+// Route::resource('tumbling', 'EventControllers\TumblingController');
+
+// Route::resource('synchro', 'EventControllers\SynchroController');
+
+// Route::resource('skills', 'SkillsController');
+
+// Route::get('skills/valid', 'SkillsController@getValid');
+
+// Route::any('routines/{id}/skills', 'RoutinesController@showSkills');
+
+// Route::post('login', array('as' => 'login', 'uses' => 'AccountController@postLogin'));
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Routing prefixed for API
+|
+| NOTE: ALL CONTROLLERS HERE ARE UNDER 'Api' NAMESPACE SO NO COLLISIONS
+|
+*/
+
+Route::group(array('prefix' => 'api', 'namespace' => 'Api'), function() {
+	
+	Route::controller('account', 'AccountController');
+
+	Route::put('athletes/{athleteId}/{routineType}/{routineId}', 'AthletesController@putAssociate')
+		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z_]+', 'routineId' => '[0-9]+'));
+	Route::delete('athletes/{athleteId}/{routineType}', 'AthletesController@deleteAssociation')
+		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z_]+'));
+
+	Route::put('athletes/{athlete}/synchro-partner/{partner}', 'AthletesController@putAssociateSynchroPartner')
+		->where(array('athleteId' => '[0-9]+', 'partnerId' => '[0-9]+'));
+	Route::delete('athletes/{athlete}/synchro-partner/{partner}', 'AthletesController@deleteAssociatedSynchroPartner')
+		->where(array('athleteId' => '[0-9]+', 'partnerId' => '[0-9]+'));
+	
+	Route::resource('athletes', 'AthletesController');
+
+	Route::get('athletes/{athleteId}/{event}', 'AthletesController@getRoutinesForEvent');
+
+	Route::resource('routines', 'RoutinesController');
+
+	Route::get('routines/{routineId}/skills', 'RoutinesController@getSkills');
+
+	Route::get('compcard/download', 'CompcardController@getDownload');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Auth Token Routes
+|--------------------------------------------------------------------------
+|
+| Routes for tappleby/laravel-auth-token
+|
+*/
+
+Route::get('api/auth', 'Tappleby\AuthToken\AuthTokenController@index');
+Route::post('api/auth', 'Tappleby\AuthToken\AuthTokenController@store');
+Route::delete('api/auth', 'Tappleby\AuthToken\AuthTokenController@destroy');
+
+
+Route::get('phpinfo', function() { phpinfo(); });
+
+
 /** all API routes go first, any uncaught routes go to index */
 Route::group(array('prefix' => 'service'), function() {
     Route::resource('authenticate', 'AuthenticationController');
     Route::resource('movies', 'MovieController');
 });
 
-Route::any('{all}', function($uri)
-	{
-		return View::make('index');
-	})->where('all', '.*');
+Route::get('/', function() {
+	return View::make('index');
+});
+
+// Need for HTML 5 angular routing
+Route::any('{all}', function($uri) {
+	return View::make('index');
+})->where('all', '.*');

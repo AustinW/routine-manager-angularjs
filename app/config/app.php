@@ -65,7 +65,7 @@ return array(
 	|
 	*/
 
-	'key' => '',
+	'key' => 'QJzOaSzcCumV5bN5TvDAEff12jNxms1v',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -107,13 +107,15 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		'Chumper\Zipper\ZipperServiceProvider',
+		'Tappleby\AuthToken\AuthTokenServiceProvider',
+
 		/*** Additional Providers ***/
-//		'Robbo\Presenter\PresenterServiceProvider', // Presenter
-//		'Zizaco\Entrust\EntrustServiceProvider', // Entrust Provider for roles
+		'Zizaco\Entrust\EntrustServiceProvider', // Entrust Provider for roles
 
 		/* Uncomment for use in development */
-//		'Way\Generators\GeneratorsServiceProvider', // Generators
-//		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider', // IDE Helpers
+		'Way\Generators\GeneratorsServiceProvider', // Generators
+		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider', // IDE Helpers
 
 	),
 
@@ -181,10 +183,30 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
+		'Pdfdf'           => 'Austinw\Pdfdf\PdfdfFacace',
+
+		'AuthToken'                       => 'Tappleby\Support\Facades\AuthToken',
+		'AuthTokenNotAuthorizedException' => 'Tappleby\AuthToken\Exceptions\NotAuthorizedException',
+
 		/*** Additional Aliases ***/
 		'Entrust'         => 'Zizaco\Entrust\EntrustFacade', // Entrust Alias
-		'Presenter'       => 'Robbo\Presenter\Presenter', // Presenter
-		'Presentable'     => 'Robbo\Presenter\PresentableInterface', // Presenter
+	),
+
+	'compcards' => array(
+		'source' => array(
+			'elite' => array(
+				'trampoline' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_tr.pdf',
+				'synchro'    => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_sy.pdf',
+				'doublemini' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_dm.pdf',
+				'tumbling'   => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_tu.pdf',
+			),
+			'jo' => array(
+				'trampoline' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_jo_tr.pdf',
+				'synchro'    => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_jo_sy.pdf',
+				'doublemini' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_jo_dm.pdf',
+				'tumbling'   => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_jo_tu.pdf',
+			),
+		),
 	),
 
 );

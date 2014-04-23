@@ -2,9 +2,12 @@
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
-use LaravelBook\Ardent\Ardent;
 
-class User extends Ardent implements UserInterface, RemindableInterface {
+// use Jenssegers\Mongodb\Model as Eloquent; // Use MongoDB
+
+class User extends Eloquent implements UserInterface, RemindableInterface {
+
+	protected $fillable = ['email', 'password', 'first_name', 'last_name'];
 
 	/**
 	 * The database table used by the model.
@@ -14,20 +17,16 @@ class User extends Ardent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 
 	/**
-	 * The rules used to validate the model
-	 *
-	 * @var array
-	 */
-	public static $rules = array(
-
-	);
-
-	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
 	protected $hidden = array('password');
+
+	public function name()
+	{
+		return $this->first_name . ' ' . $this->last_name;
+	}
 
 	/**
 	 * Get the unique identifier for the user.
@@ -58,5 +57,37 @@ class User extends Ardent implements UserInterface, RemindableInterface {
 	{
 		return $this->email;
 	}
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
+
+	/**
+	 * Return a collection of athlete models for a given user.
+	 *
+	 * @return array
+	 */
+	public function athletes()
+	{
+		return $this->hasMany('Athlete');
+	}
+
+	public function routines() { return $this->hasMany('Routine'); }
 
 }

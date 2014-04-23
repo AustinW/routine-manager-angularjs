@@ -1,16 +1,15 @@
-angular.module('myApp')
-    .factory('Authenticate', function($resource){
+var routineManagerServices = angular.module('routineManager.services', ['ngResource']);
+
+routineManagerServices
+    .factory('Authenticate', function($resource) {
         return $resource("/service/authenticate/")
     })
-    .factory('Movies', function($resource){
-        return $resource("/service/movies")
-    })
-    .factory('Flash', function($rootScope){
+    .factory('Flash', function($rootScope) {
         return {
-            show: function(message){
+            show: function(message) {
                 $rootScope.flash = message
             },
-            clear: function(){
+            clear: function() {
                 $rootScope.flash = ""
             }
         }

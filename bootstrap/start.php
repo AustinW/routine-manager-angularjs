@@ -28,7 +28,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('your-machine-name'),
+	'local' => array('http://routine-manager.dev', 'Austins-MacBook-Pro.local', 'http://routine-manager-angular.dev'),
 
 ));
 
