@@ -194,6 +194,22 @@ module.exports = function(grunt) {
                     dest: '<%= assetsDir %>/js'
                 }]
             },
+            angularFlash: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= bowerDir %>/angular-flash/dist',
+                    src: ['angular-flash.js'],
+                    dest: '<%= assetsDir %>/js'
+                }]
+            },
+            restangular: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= bowerDir %>/restangular/dist',
+                    src: ['restangular.js'],
+                    dest: '<%= assetsDir %>/js'
+                }]
+            },
             jquery: {
                 files: [{
                     expand: true,
@@ -224,12 +240,32 @@ module.exports = function(grunt) {
                 files: {
                     '<%= assetsDir %>/tmp/font-awesome.css': '<%= assetsDir %>/less/font-awesome/main.less'
                 }
+            },
+            googlefonts: {
+                options: {
+                    ieCompat: true,
+                    yuicompress: true,
+                    paths: ['<%= assetsDir %>/less']
+                },
+                files: {
+                    '<%= assetsDir %>/tmp/google-fonts.css': '<%= assetsDir %>/less/google-fonts.less'
+                }
+            },
+            app: {
+                options: {
+                    ieCompat: true,
+                    yuicompress: true,
+                    paths: ['<%= assetsDir %>/less']
+                },
+                files: {
+                    '<%= assetsDir %>/tmp/style.css': '<%= assetsDir %>/less/style.less'
+                }
             }
         },
 
         concat: {
             css: {
-                src: ['<%= assetsDir %>/tmp/bootstrap.css', '<%= assetsDir %>/tmp/font-awesome.css'],
+                src: ['<%= assetsDir %>/tmp/bootstrap.css', '<%= assetsDir %>/tmp/font-awesome.css', '<%= assetsDir %>/tmp/style.css', '<%= assetsDir %>/tmp/google-fonts.css'],
                 dest: '<%= assetsDir %>/tmp/concat.css'
             },
             js: {
@@ -248,6 +284,8 @@ module.exports = function(grunt) {
                     '<%= assetsDir %>/js/ui-bootstrap-tpls.js',
                     '<%= assetsDir %>/js/angular-ui-router.js',
                     '<%= assetsDir %>/js/ng-table.js',
+                    '<%= assetsDir %>/js/angular-flash.js',
+                    '<%= assetsDir %>/js/restangular.js',
                     '<%= assetsDir %>/js/jquery.js',
                     '<%= assetsDir %>/js/bootstrap.js'
                 ],

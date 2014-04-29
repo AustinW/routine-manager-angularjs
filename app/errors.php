@@ -21,3 +21,10 @@ App::error(function(Exception $exception, $code)
 		Log::error($exception);
 	}
 });
+
+// App::missing(function($exception)
+// {
+// 	Log::error($exception);
+	
+//     return Response::apiError(Lang::get('route.not_found'), 404);
+// });

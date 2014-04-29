@@ -1,0 +1,71 @@
+<div class="modal-header">
+    <h3>{{ title }}</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="first_name" class="col-sm-4 control-label">First name</label>
+            <div class="col-sm-8">
+                <input type="text" id="first_name" class="form-control" ng-model="athlete.first_name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="last_name" class="col-sm-4 control-label">Last name</label>
+            <div class="col-sm-8">
+                <input type="text" id="last_name" class="form-control" ng-model="athlete.last_name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gender" class="col-sm-4 control-label"><i class="fa fa-{{ athlete.gender }}"></i> Gender</label>
+            <div class="col-sm-8">
+                <select id="gender" ng-model="athlete.gender" ng-options="gender for gender in genders"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthday" class="col-sm-4 control-label">Birthday</label>
+            <div class="col-sm-8">
+                <input type="text" id="birthday" class="form-control" ng-model="athlete.birthday" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="team" class="col-sm-4 control-label">Team</label>
+            <div class="col-sm-8">
+                <input type="text" id="team" class="form-control" ng-model="athlete.team" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="trampoline_level" class="col-sm-4 control-label">Trampoline Level</label>
+            <div class="col-sm-8">
+                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.trampolineLevel' class="form-control" }} -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="synchro_level" class="col-sm-4 control-label">Synchro Level</label>
+            <div class="col-sm-8">
+                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.synchroLevel' class="form-control" }} -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="doublemini_level" class="col-sm-4 control-label">Double Mini Level</label>
+            <div class="col-sm-8">
+                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.doubleminiLevel' class="form-control" }} -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tumbling_level" class="col-sm-4 control-label">Tumbling Level</label>
+            <div class="col-sm-8">
+                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.tumblingLevel' class="form-control" }} -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="notes" class="col-sm-4 control-label">Notes</label>
+            <div class="col-sm-8">
+                <textarea id="notes" class="form-control" ng-model="athlete.notes"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

@@ -95,6 +95,8 @@ Route::group(array('prefix' => 'api', 'namespace' => 'Api'), function() {
 	
 	Route::controller('account', 'AccountController');
 
+	Route::controller('user', 'UserController');
+
 	Route::put('athletes/{athleteId}/{routineType}/{routineId}', 'AthletesController@putAssociate')
 		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z_]+', 'routineId' => '[0-9]+'));
 	Route::delete('athletes/{athleteId}/{routineType}', 'AthletesController@deleteAssociation')
@@ -104,7 +106,7 @@ Route::group(array('prefix' => 'api', 'namespace' => 'Api'), function() {
 		->where(array('athleteId' => '[0-9]+', 'partnerId' => '[0-9]+'));
 	Route::delete('athletes/{athlete}/synchro-partner/{partner}', 'AthletesController@deleteAssociatedSynchroPartner')
 		->where(array('athleteId' => '[0-9]+', 'partnerId' => '[0-9]+'));
-	
+
 	Route::resource('athletes', 'AthletesController');
 
 	Route::get('athletes/{athleteId}/{event}', 'AthletesController@getRoutinesForEvent');
@@ -136,14 +138,27 @@ Route::get('phpinfo', function() { phpinfo(); });
 /** all API routes go first, any uncaught routes go to index */
 Route::group(array('prefix' => 'service'), function() {
     Route::resource('authenticate', 'AuthenticationController');
-    Route::resource('movies', 'MovieController');
 });
 
 Route::get('/', function() {
 	return View::make('index');
 });
 
-// Need for HTML 5 angular routing
-Route::any('{all}', function($uri) {
+/*
+|--------------------------------------------------------------------------
+| Catch All Route
+|--------------------------------------------------------------------------
+|
+| All routes that are not home or api will be redirected to the frontend
+| this allows angular to route them.
+|
+*/
+App::missing(function($exception)
+{
 	return View::make('index');
-})->where('all', '.*');
+});
+
+// Need for HTML 5 angular routing
+// Route::any('{all}', function($uri) {
+// 	return View::make('index');
+// })->where('all', '.*');

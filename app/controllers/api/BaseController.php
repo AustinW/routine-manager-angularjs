@@ -11,8 +11,7 @@ class BaseController extends Controller {
 
 	public function __construct()
 	{
-		if (Auth::check())
-			$this->user = Auth::user();
+		$this->user = Auth::user();
 	}
 
 	public function userId()

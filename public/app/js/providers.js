@@ -8,7 +8,7 @@ routineManagerProviders
                     update: {
                         method: 'PUT'
                     }
-                })
+                });
 
                 return Athlete;
             }

@@ -6,13 +6,13 @@ use \User, \Validator, \Input, \Auth, \Response, \Lang;
 
 class AccountController extends BaseController {
 	
-	protected $user;
+	protected $userRepository;
 
 	public function __construct(User $user)
 	{
 		parent::__construct();
 
-		$this->user = $user;
+		$this->userRepository = $user;
 	}
 
 	public function postLogin()
@@ -24,7 +24,7 @@ class AccountController extends BaseController {
 		}
 
 		if (Auth::check()) {
-			return Response::apiError('You are already logged in');
+			return Response::apiError(Lang::get('auth.logged_in'));
 		}
 
 		$credentials = [
@@ -36,21 +36,21 @@ class AccountController extends BaseController {
 
 		if ($attempt) {
 
-			$verified = Auth::user()->verified_at != null;
+			$user = Auth::user();
+
+			$verified = $user->verified_at != null;
 			
 			if ( ! $verified) {
 				Auth::logout();
 
-				return Response::apiError('The account you\'re trying to login to has not been verified');
+				return Response::apiError(Lang::get('auth.not_verified'));
 			} else {
 
-				return Response::apiMessage('Login successful');
+				return Response::apiMessage(Lang::get('auth.successful'), ['session_id' => \Session::getId(), 'user' => $user->toArray()]);
 			}
 
 		} else {
-			Auth::logout();
-
-			return Response::apiError('Login unsuccessful. Invalid credentials.', 401);
+			return Response::apiError(Lang::get('auth.invalid'), 401);
 		}
 	}
 
@@ -58,7 +58,16 @@ class AccountController extends BaseController {
 	{
 		Auth::logout();
 
-		return Response::apiMessage('You have been logged out.');
+		return Response::apiMessage(Lang::get('auth.logout'));
+	}
+
+	public function getCheck()
+	{
+		$check = ['logged_in' => Auth::check()];
+
+		return ($check['logged_in'])
+			? Response::apiMessage(Lang::get('auth.logged_in'), $check)
+			: Response::apiMessage(Lang::get('auth.not_logged_in'), $check);
 	}
 
 	public function postRegister()
@@ -79,7 +88,7 @@ class AccountController extends BaseController {
 
 		} else {
 
-			$newUser = $this->user->create([
+			$newUser = $this->userRepository->create([
 				'email'      => $input['email'],
 				'password'   => $input['password'],
 				'first_name' => $input['first_name'],
@@ -91,7 +100,7 @@ class AccountController extends BaseController {
 
 			// Auth::login($newUser); // <-- must be verified first
 
-			return Response::apiMessage('You have successfully registered and are now logged in.');
+			return Response::apiMessage(Lang::get('auth.registered'));
 		}
 	}
 }

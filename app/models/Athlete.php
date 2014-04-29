@@ -277,6 +277,9 @@ class Athlete extends BaseModel
 		if ($routines) {
 			foreach ($routines as $routine) {
 				if ($routine->pivot->routine_type == $routineType) {
+
+					return $routine->id;
+					
 					if ($withSkills) {
 						$routine->skills;
 					}
@@ -349,22 +352,22 @@ class Athlete extends BaseModel
 	public function getTumPass3Attribute() { return $this->getRoutineFromRelationship('tum_pass_3', 'tumblingPasses'); }
 	public function getTumPass4Attribute() { return $this->getRoutineFromRelationship('tum_pass_4', 'tumblingPasses'); }
 
-	public function getTraPrelimCompulsoryModelAttribute()  { return $this->getRoutineFromRelationship('tra_prelim_compulsory',   'trampolineRoutines'); }
-	public function getTraPrelimOptionalModelAttribute()    { return $this->getRoutineFromRelationship('tra_prelim_optional',     'trampolineRoutines'); }
-	public function getTraSemiFinalOptionalModelAttribute() { return $this->getRoutineFromRelationship('tra_semi_final_optional', 'trampolineRoutines'); }
-	public function getTraFinalOptionalModelAttribute()     { return $this->getRoutineFromRelationship('tra_final_optional',      'trampolineRoutines'); }
+	// public function getTraPrelimCompulsoryModelAttribute()  { return $this->getRoutineFromRelationship('tra_prelim_compulsory',   'trampolineRoutines'); }
+	// public function getTraPrelimOptionalModelAttribute()    { return $this->getRoutineFromRelationship('tra_prelim_optional',     'trampolineRoutines'); }
+	// public function getTraSemiFinalOptionalModelAttribute() { return $this->getRoutineFromRelationship('tra_semi_final_optional', 'trampolineRoutines'); }
+	// public function getTraFinalOptionalModelAttribute()     { return $this->getRoutineFromRelationship('tra_final_optional',      'trampolineRoutines'); }
 
-	public function getSyncPrelimCompulsoryModelAttribute()  { return $this->getRoutineFromRelationship('sync_prelim_compulsory', 'synchroRoutines'); }
-	public function getSyncPrelimOptionalModelAttribute()    { return $this->getRoutineFromRelationship('sync_prelim_optional',   'synchroRoutines'); }
-	public function getSyncFinalOptionalModelAttribute()     { return $this->getRoutineFromRelationship('sync_final_optional',    'synchroRoutines'); }
+	// public function getSyncPrelimCompulsoryModelAttribute()  { return $this->getRoutineFromRelationship('sync_prelim_compulsory', 'synchroRoutines'); }
+	// public function getSyncPrelimOptionalModelAttribute()    { return $this->getRoutineFromRelationship('sync_prelim_optional',   'synchroRoutines'); }
+	// public function getSyncFinalOptionalModelAttribute()     { return $this->getRoutineFromRelationship('sync_final_optional',    'synchroRoutines'); }
 
-	public function getDmtPass1ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_1', 'doubleminiPasses'); }
-	public function getDmtPass2ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_2', 'doubleminiPasses'); }
-	public function getDmtPass3ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_3', 'doubleminiPasses'); }
-	public function getDmtPass4ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_4', 'doubleminiPasses'); }
+	// public function getDmtPass1ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_1', 'doubleminiPasses'); }
+	// public function getDmtPass2ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_2', 'doubleminiPasses'); }
+	// public function getDmtPass3ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_3', 'doubleminiPasses'); }
+	// public function getDmtPass4ModelAttribute() { return $this->getRoutineFromRelationship('dmt_pass_4', 'doubleminiPasses'); }
 
-	public function getTumPass1ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_1', 'tumblingPasses'); }
-	public function getTumPass2ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_2', 'tumblingPasses'); }
-	public function getTumPass3ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_3', 'tumblingPasses'); }
-	public function getTumPass4ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_4', 'tumblingPasses'); }
+	// public function getTumPass1ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_1', 'tumblingPasses'); }
+	// public function getTumPass2ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_2', 'tumblingPasses'); }
+	// public function getTumPass3ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_3', 'tumblingPasses'); }
+	// public function getTumPass4ModelAttribute() { return $this->getRoutineFromRelationship('tum_pass_4', 'tumblingPasses'); }
 }

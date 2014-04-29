@@ -41,7 +41,18 @@ class AthletesController extends BaseController
 	 */
 	public function index()
 	{
-		return $this->athleteRepository->where('user_id', Auth::user()->getKey())->whereNull('deleted_at')->get()->toArray();
+		$athletes = $this->athleteRepository->where('user_id', Auth::user()->getKey())->whereNull('deleted_at')->get();
+
+		$athletesArray = $athletes->toArray();
+
+		foreach ($athletesArray as &$athleteArray) {
+			unset($athleteArray['trampoline_routines']);
+			unset($athleteArray['synchro_routines']);
+			unset($athleteArray['doublemini_passes']);
+			unset($athleteArray['tumbling_passes']);
+		}
+
+		return $athletesArray;
 	}
 
 	/**
