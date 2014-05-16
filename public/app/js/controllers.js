@@ -151,7 +151,9 @@ routineManagerControllers
 
             $scope.athlete = originalAthlete;
 
+            // Refactor
             $scope.trampolineRoutines = trampolineRoutines;
+            // Refactor
             $scope.trampolineRoutines.unshift({
                 id: 0,
                 name: 'None'
@@ -159,6 +161,7 @@ routineManagerControllers
 
             $scope.activeRoutine = 0;
 
+            // Refactor
             $scope.routines = {
                 tra_prelim_compulsory: 0,
                 tra_prelim_optional: 0,
@@ -166,13 +169,16 @@ routineManagerControllers
                 tra_final_optional: 0
             };
 
+            // Refactor
             _.each($scope.athlete.trampoline_routines, function(routine) {
                 if (routine && routine.pivot && routine.pivot.routine_type)
                     $scope.routines[routine.pivot.routine_type] = routine.id;
             });
 
+            // Refactor
             $scope.title = 'Choose Trampoline Routines';
 
+            // Refactor
             $scope.selectedRoutine = function(routineId) {
                 $scope.activeRoutine = $filter('getById')($scope.trampolineRoutines, routineId);
             };
@@ -185,6 +191,7 @@ routineManagerControllers
 
                     _.each($scope.routines, function(athleteChosenRoutine, routineType) {
 
+                        // Refactor
                         var athleteCurrentRoutine = $filter('getRoutine')($scope.athlete.trampoline_routines, routineType) || {
                             id: 0
                         };
@@ -200,6 +207,7 @@ routineManagerControllers
                     });
 
                     $q.all(promises).then(function(results) {
+                        // Refactor
                         Restangular.one('athletes', $scope.athlete.id).getList('trampoline').then(function(routines) {
                             console.log(routines);
                             $modalInstance.close(routines);
