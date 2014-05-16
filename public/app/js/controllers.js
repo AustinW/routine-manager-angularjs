@@ -40,13 +40,11 @@ routineManagerControllers
                 }
             };
 
-            AthleteService.findAll().then(function(athletes) {
-                $scope.athletes = athletes;
-            });
+            $scope.athletes = AthleteService.findAll();
         }
     ])
-    .controller('AthleteViewCtrl', ['$scope', '$stateParams', 'AthleteService', 'RoutineService', 'Restangular', 'LEVELS', 'ROUTINES',
-        function($scope, $stateParams, AthleteService, RoutineService, Restangular, LEVELS, ROUTINES) {
+    .controller('AthleteViewCtrl', ['$scope', '$modal', '$stateParams', 'AthleteService', 'RoutineService', 'Restangular', 'LEVELS', 'ROUTINES',
+        function($scope, $modal, $stateParams, AthleteService, RoutineService, Restangular, LEVELS, ROUTINES) {
 
             $scope.levelLabel = AthleteService.levelLabel;
 
@@ -54,30 +52,76 @@ routineManagerControllers
 
             $scope.hasRoutineTypes = {};
 
-            _.each(ROUTINES, function(routineType) {
-                $scope.hasRoutineTypes[routineType] = false;
-            });
+            $scope.athlete = null;
 
+            $scope.athletes = AthleteService.findAll();
 
-            AthleteService.findAll().then(function(athletes) {
-                $scope.athletes = athletes;
+            AthleteService.findOne($stateParams.athlete_id).then(function(athlete) {
 
-                $scope.athlete = _.find(athletes, function(athlete) {
-                    return athlete.id === $stateParams.athlete_id;
+                $scope.athlete = athlete;
+
+                _.each(['trampoline_routines', 'synchro_routines', 'doublemini_passes', 'tumbling_passes'], function(routineGrouping) {
+                    _.each(athlete[routineGrouping], function(routine) {
+                        $scope[routine.pivot.routine_type] = routine;
+                        $scope.hasRoutineTypes[routine.pivot.routine_type] = true;
+                    });
                 });
 
-                _.each(ROUTINES, function(routineType) {
-                    if ($scope.athlete[routineType] != null) {
+            });
 
-                        RoutineService.findOne($scope.athlete[routineType]).then(function(routine) {
+            var athleteResolve = {
+                athlete: function() {
+                    return $scope.athlete;
+                }
+            };
 
-                            $scope[routineType] = routine;
+            $scope.edit = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: '/app/views/modals/athlete.html',
+                    controller: 'AthleteInstanceCtrl',
+                    resolve: athleteResolve
+                });
 
-                            $scope.hasRoutineTypes[routineType] = true;
-                        });
+                modalInstance.result.then(function(updatedAthlete) {
+                    $scope.athlete = updatedAthlete;
+                });
+            };
+
+            $scope.chooseTrampoline = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: '/app/views/modals/choose/trampoline.html',
+                    controller: 'AthleteChooseTrampolineCtrl',
+                    size: 'lg',
+                    resolve: {
+                        athlete: function() {
+                            return $scope.athlete;
+                        },
+                        trampolineRoutines: function() {
+                            return RoutineService.allTrampoline().then(function(routines) {
+                                return routines;
+                            });
+                        }
                     }
                 });
 
+                modalInstance.result.then(function(newlyAssignedRoutines) {
+                    $scope.athlete.trampoline_routines = newlyAssignedRoutines;
+
+                    $scope.hasRoutineTypes = [];
+
+                    _.each($scope.athlete.trampoline_routines, function(routine) {
+                        if (routine && routine.pivot) {
+                            var routineType = routine.pivot.routine_type;
+
+                            $scope[routineType] = routine;
+                            $scope.hasRoutineTypes[routineType] = true;
+                        }
+                    });
+                });
+            };
+
+            _.each(ROUTINES, function(routineType) {
+                $scope.hasRoutineTypes[routineType] = false;
             });
         }
     ])
@@ -86,12 +130,12 @@ routineManagerControllers
 
             $scope.athlete = {};
 
-            $scope.title = 'Add an athlete';
+            $scope.title = $scope.athlete.hasOwnProperty('first_name') ? 'Edit Athlete' : 'Add an athlete';
 
             $scope.open = function() {
 
                 var modalInstance = $modal.open({
-                    templateUrl: 'app/views/modals/athlete.html',
+                    templateUrl: '/app/views/modals/athlete.html',
                     controller: 'AthleteInstanceCtrl',
                     resolve: {
                         athlete: function() {
@@ -99,32 +143,121 @@ routineManagerControllers
                         }
                     }
                 });
-
-                modalInstance.result.then(function(selectedItem) {
-                    $scope.selected = selectedItem;
-                }, function() {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
             };
         }
     ])
-    .controller('AthleteInstanceCtrl', ['$scope', '$modalInstance', 'athlete',
-        function($scope, $modalInstance, athlete) {
+    .controller('AthleteChooseTrampolineCtrl', ['$scope', '$modalInstance', '$location', '$filter', '$q', 'Restangular', 'athlete', 'trampolineRoutines', 'LEVELS', 'AthleteService',
+        function($scope, $modalInstance, $location, $filter, $q, Restangular, originalAthlete, trampolineRoutines, LEVELS, AthleteService, getRoutine) {
 
-            $scope.athlete = athlete;
+            $scope.athlete = originalAthlete;
+
+            $scope.trampolineRoutines = trampolineRoutines;
+            $scope.trampolineRoutines.unshift({
+                id: 0,
+                name: 'None'
+            });
+
+            $scope.activeRoutine = 0;
+
+            $scope.routines = {
+                tra_prelim_compulsory: 0,
+                tra_prelim_optional: 0,
+                tra_semi_final_optional: 0,
+                tra_final_optional: 0
+            };
+
+            _.each($scope.athlete.trampoline_routines, function(routine) {
+                if (routine && routine.pivot && routine.pivot.routine_type)
+                    $scope.routines[routine.pivot.routine_type] = routine.id;
+            });
+
+            $scope.title = 'Choose Trampoline Routines';
+
+            $scope.selectedRoutine = function(routineId) {
+                $scope.activeRoutine = $filter('getById')($scope.trampolineRoutines, routineId);
+            };
+
+            $scope.save = function(isValid) {
+
+                if (isValid) {
+
+                    var promises = [];
+
+                    _.each($scope.routines, function(athleteChosenRoutine, routineType) {
+
+                        var athleteCurrentRoutine = $filter('getRoutine')($scope.athlete.trampoline_routines, routineType) || {
+                            id: 0
+                        };
+
+                        if (athleteChosenRoutine != athleteCurrentRoutine.id) {
+
+                            if (athleteChosenRoutine) {
+                                promises.push(Restangular.one('athletes', $scope.athlete.id).one(routineType, athleteChosenRoutine).put());
+                            } else {
+                                promises.push(Restangular.one('athletes', $scope.athlete.id).all(routineType).remove());
+                            }
+                        }
+                    });
+
+                    $q.all(promises).then(function(results) {
+                        Restangular.one('athletes', $scope.athlete.id).getList('trampoline').then(function(routines) {
+                            console.log(routines);
+                            $modalInstance.close(routines);
+                        });
+                    });
+
+                } else {
+                    alert('Form is invalid.');
+                    console.log(isValid);
+                }
+            };
+
+            $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+            };
+        }
+    ])
+    .controller('AthleteInstanceCtrl', ['$scope', '$modalInstance', '$location', 'Restangular', 'athlete', 'LEVELS', 'AthleteService',
+        function($scope, $modalInstance, $location, Restangular, originalAthlete, LEVELS, AthleteService) {
+
+            $scope.athlete = Restangular.copy(originalAthlete);
+
+            console.log('Athlete: ', $scope.athlete);
+
+            $scope.athlete.trampoline_level = $scope.athlete.trampoline_level ? $scope.athlete.trampoline_level : '0';
+            $scope.athlete.synchro_level = $scope.athlete.synchro_level ? $scope.athlete.synchro_level : '0';
+            $scope.athlete.doublemini_level = $scope.athlete.doublemini_level ? $scope.athlete.doublemini_level : '0';
+            $scope.athlete.tumbling_level = $scope.athlete.tumbling_level ? $scope.athlete.tumbling_level : '0';
 
             $scope.genders = ['male', 'female'];
 
-            if (!$scope.athlete.length) {
+            $scope.athlete.gender = $scope.athlete.gender ? $scope.athlete.gender : 'male';
+
+            $scope.levels = LEVELS;
+
+            if (!$scope.athlete.$fromServer) {
                 $scope.title = 'Add an Athlete';
             } else {
                 $scope.title = 'Edit ' + $scope.athlete.first_name + ' ' + $scope.athlete.last_name;
             }
 
-            $scope.save = function() {
-                console.log($scope.athlete);
-                $modalInstance.close();
+            $scope.save = function(isValid) {
 
+                if (isValid) {
+
+                    $scope.athlete.put().then(function(response) {
+                        delete $scope.error;
+                        $modalInstance.close($scope.athlete);
+
+                        console.log('response', response);
+                        $location.path('/athletes/' + response.id);
+                    });
+
+                    console.log($scope.athlete);
+                } else {
+                    alert('form is invalid');
+                    console.log(isValid);
+                }
             };
 
             $scope.cancel = function() {

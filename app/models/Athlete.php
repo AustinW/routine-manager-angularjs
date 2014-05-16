@@ -7,7 +7,7 @@ class Athlete extends BaseModel
 
 	protected $softDelete = true;
 
-	protected $appends = [
+	protected $routineTypes = [
 		'tra_prelim_compulsory', 'tra_prelim_optional', 'tra_semi_final_optional', 'tra_final_optional',
 		'sync_prelim_compulsory', 'sync_prelim_optional', 'sync_final_optional',
 		'dmt_pass_1', 'dmt_pass_2', 'dmt_pass_3', 'dmt_pass_4',
@@ -55,33 +55,21 @@ class Athlete extends BaseModel
 	{
 		return $this->belongsToMany('TrampolineRoutine', 'athlete_routine', 'athlete_id', 'routine_id')
 			->withPivot('routine_type')
-			->whereType('trampoline')
-			->wherePivot('routine_type', '=', 'tra_prelim_compulsory')
-			->orWherePivot('routine_type', '=', 'tra_prelim_optional')
-			->orWherePivot('routine_type', '=', 'tra_semi_final_optional')
-			->orWherePivot('routine_type', '=', 'tra_final_optional');
+			->whereType('trampoline');
 	}
 
 	public function doubleminiPasses()
 	{
 		return $this->belongsToMany('DoubleminiPass', 'athlete_routine', 'athlete_id', 'routine_id')
 			->withPivot('routine_type')
-			->whereType('doublemini')
-			->wherePivot('routine_type', '=', 'dmt_pass_1')
-			->orWherePivot('routine_type', '=', 'dmt_pass_2')
-			->orWherePivot('routine_type', '=', 'dmt_pass_3')
-			->orWherePivot('routine_type', '=', 'dmt_pass_4');
+			->whereType('doublemini');
 	}
 
 	public function tumblingPasses()
 	{
 		return $this->belongsToMany('TumblingPass', 'athlete_routine', 'athlete_id', 'routine_id')
 			->withPivot('routine_type')
-			->whereType('tumbling')
-			->wherePivot('routine_type', '=', 'tum_pass_1')
-			->orWherePivot('routine_type', '=', 'tum_pass_2')
-			->orWherePivot('routine_type', '=', 'tum_pass_3')
-			->orWherePivot('routine_type', '=', 'tum_pass_4');
+			->whereType('tumbling');
 	}
 
 	public function generateCompcards($events = array())
@@ -156,6 +144,11 @@ class Athlete extends BaseModel
 	public function routines()
 	{
 		return $this->belongsToMany('Routine')->withPivot('routine_type');
+	}
+
+	public function routineOfType($routineType)
+	{
+		return $this->routines()->wherePivot('routine_type', $routineType)->first();
 	}
 
 	public function findWithRelationAndCheckOwner($relation, $id, \User $user)
@@ -272,18 +265,14 @@ class Athlete extends BaseModel
 			return $this->{$relationship};
 		};
 
-		$routines = Cache::get('athlete:' . $this->getKey() . ':' . $relationship, $cacheMiss->bindTo($this));
+		// $routines = Cache::get('athlete:' . $this->getKey() . ':' . $relationship, $cacheMiss->bindTo($this));
+
+		$routines = $this->{$relationship};
 
 		if ($routines) {
 			foreach ($routines as $routine) {
 				if ($routine->pivot->routine_type == $routineType) {
-
 					return $routine->id;
-					
-					if ($withSkills) {
-						$routine->skills;
-					}
-					return $routine;
 				}
 			}
 		}
@@ -293,27 +282,26 @@ class Athlete extends BaseModel
 
 	public function attachRoutinesToAthleteArray()
 	{
-		// Attach athlete array to 'athlete' key
-		$athleteArray = ['athlete' => $this->toArray()];
-
-		// Remove the relations that are attached automatically via \Illuminate\Database\Eloquent\Model
-		unset($athleteArray['athlete']['trampoline_routines']);
-		unset($athleteArray['athlete']['synchro_routines']);
-		unset($athleteArray['athlete']['doublemini_passes']);
-		unset($athleteArray['athlete']['tumbling_passes']);
+		$athleteArray = $this->toArray();
 
 		// Get all routine types
-		$routineTypes = $this->appends;
+		$routineTypes = $this->routineTypes;
+
+		// Remove the relations that are attached automatically via \Illuminate\Database\Eloquent\Model
+		// unset($athleteArray['athlete']['trampoline_routines']);
+		// unset($athleteArray['athlete']['synchro_routines']);
+		// unset($athleteArray['athlete']['doublemini_passes']);
+		// unset($athleteArray['athlete']['tumbling_passes']);
 
 		// Loop through all routine types
 		foreach ($routineTypes as $routineTypeCheck) {
 
 			// If the athlete does not have a routine assigned, remove it
-			if ($athleteArray['athlete'][$routineTypeCheck] == null)
-				unset($athleteArray['athlete'][$routineTypeCheck]);
+			if ($athleteArray[$routineTypeCheck] == null)
+				unset($athleteArray[$routineTypeCheck]);
 			// Else convert the routine id to an actual model array
 			else
-				$athleteArray['athlete'][$routineTypeCheck] = $athleteArray['athlete'][$routineTypeCheck]->toArray();
+				$athleteArray[$routineTypeCheck] = $athleteArray[$routineTypeCheck]->toArray();
 		}
 
 		foreach ($routineTypes as $routineType) {

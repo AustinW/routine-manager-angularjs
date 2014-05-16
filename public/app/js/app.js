@@ -89,12 +89,13 @@ angular.module('myApp', [
             }
 
             var error = function(response) {
-                if (response.status = 401) {
+                if (response.status == 401) {
                     delete sessionStorage.authenticated;
                     $location.path('/login');
 
                     flash.error = 'You must be logged in before accessing that feature.';
                 }
+
                 return $q.reject(response)
             }
             return function(promise) {

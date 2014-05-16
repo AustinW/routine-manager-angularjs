@@ -66,7 +66,7 @@ routineManagerFactories
         function(Restangular, LEVELS) {
             return {
                 findAll: function() {
-                    return Restangular.all('athletes').getList();
+                    return Restangular.all('athletes').getList().$object;
                 },
                 findOne: function(id) {
                     return Restangular.one('athletes', id).get();
@@ -86,6 +86,16 @@ routineManagerFactories
     .factory('RoutineService', ['Restangular', 'AthleteService',
         function(Restangular, AthleteService) {
             return {
+                all: function() {
+                    return Restangular.all('routines').getList();
+                },
+
+                allTrampoline: function() {
+                    return Restangular.all('routines').getList({
+                        type: 'trampoline'
+                    });
+                },
+
                 findOne: function(id) {
                     return Restangular.one('routines', id).get();
                 }

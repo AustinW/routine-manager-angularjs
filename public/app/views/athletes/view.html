@@ -56,7 +56,7 @@
 
       <div class="row">
         <div class="col-lg-3">
-          <h4 class="trampoline">Trampoline</h4>
+          <h4 class="trampoline" style="display:inline-block">Trampoline</h4> <a href="#" ng-click="chooseTrampoline()" class="btn btn-xs btn-info">Choose</a>
 
           <dl>
             <dt>Prelim Compulsory:</dt>
@@ -64,7 +64,7 @@
               <span ng-if="hasRoutineTypes.tra_prelim_compulsory == true">
                 {{ tra_prelim_compulsory.name }} (<strong>{{ tra_prelim_compulsory.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tra_prelim_compulsory == false">
+              <span ng-if=" ! hasRoutineTypes.tra_prelim_compulsory">
                 None
               </span>
             </dd>
@@ -73,7 +73,7 @@
               <span ng-if="hasRoutineTypes.tra_prelim_optional == true">
                 {{ tra_prelim_optional.name }} (<strong>{{ tra_prelim_optional.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tra_prelim_optional == false">
+              <span ng-if=" ! hasRoutineTypes.tra_prelim_optional">
                 None
               </span>
             </dd>
@@ -82,7 +82,7 @@
               <span ng-if="hasRoutineTypes.tra_semi_final_optional == true">
                 {{ tra_semi_final_optional.name }} (<strong>{{ tra_semi_final_optional.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tra_semi_final_optional == false">
+              <span ng-if=" ! hasRoutineTypes.tra_semi_final_optional">
                 None
               </span>
             </dd>
@@ -91,7 +91,7 @@
               <span ng-if="hasRoutineTypes.tra_final_optional == true">
                 {{ tra_final_optional.name }} (<strong>{{ tra_final_optional.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tra_final_optional == false">
+              <span ng-if=" ! hasRoutineTypes.tra_final_optional">
                 None
               </span>
             </dd>
@@ -106,7 +106,7 @@
               <span ng-if="hasRoutineTypes.sync_prelim_compulsory == true">
                 {{ sync_prelim_compulsory.name }} (<strong>{{ sync_prelim_compulsory.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.sync_prelim_compulsory == false">
+              <span ng-if=" ! hasRoutineTypes.sync_prelim_compulsory">
                 None
               </span>
             </dd>
@@ -115,7 +115,7 @@
               <span ng-if="hasRoutineTypes.sync_prelim_optional == true">
                 {{ sync_prelim_optional.name }} (<strong>{{ sync_prelim_optional.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.sync_prelim_optional == false">
+              <span ng-if=" ! hasRoutineTypes.sync_prelim_optional">
                 None
               </span>
             </dd>
@@ -124,7 +124,7 @@
               <span ng-if="hasRoutineTypes.sync_final_optional == true">
                 {{ sync_final_optional.name }} (<strong>{{ sync_final_optional.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.sync_final_optional == false">
+              <span ng-if=" ! hasRoutineTypes.sync_final_optional">
                 None
               </span>
             </dd>
@@ -139,7 +139,7 @@
               <span ng-if="hasRoutineTypes.dmt_pass_1 == true">
                 {{ dmt_pass_1.name }} (<strong>{{ dmt_pass_1.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.dmt_pass_1 == false">
+              <span ng-if=" ! hasRoutineTypes.dmt_pass_1">
                 None
               </span>
             </dd>
@@ -148,7 +148,7 @@
               <span ng-if="hasRoutineTypes.dmt_pass_2 == true">
                 {{ dmt_pass_2.name }} (<strong>{{ dmt_pass_2.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.dmt_pass_2 == false">
+              <span ng-if=" ! hasRoutineTypes.dmt_pass_2">
                 None
               </span>
             </dd>
@@ -157,7 +157,7 @@
               <span ng-if="hasRoutineTypes.dmt_pass_3 == true">
                 {{ dmt_pass_3.name }} (<strong>{{ dmt_pass_3.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.dmt_pass_3 == false">
+              <span ng-if=" ! hasRoutineTypes.dmt_pass_3">
                 None
               </span>
             </dd>
@@ -166,7 +166,7 @@
               <span ng-if="hasRoutineTypes.dmt_pass_4 == true">
                 {{ dmt_pass_4.name }} (<strong>{{ dmt_pass_4.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.dmt_pass_4 == false">
+              <span ng-if=" ! hasRoutineTypes.dmt_pass_4">
                 None
               </span>
             </dd>
@@ -181,7 +181,7 @@
               <span ng-if="hasRoutineTypes.tum_pass_1 == true">
                 {{ tum_pass_1.name }} (<strong>{{ tum_pass_1.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tum_pass_1 == false">
+              <span ng-if=" ! hasRoutineTypes.tum_pass_1">
                 None
               </span>
             </dd>
@@ -190,7 +190,7 @@
               <span ng-if="hasRoutineTypes.tum_pass_2 == true">
                 {{ tum_pass_2.name }} (<strong>{{ tum_pass_2.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tum_pass_2 == false">
+              <span ng-if=" ! hasRoutineTypes.tum_pass_2">
                 None
               </span>
             </dd>
@@ -199,7 +199,7 @@
               <span ng-if="hasRoutineTypes.tum_pass_3 == true">
                 {{ tum_pass_3.name }} (<strong>{{ tum_pass_3.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tum_pass_3 == false">
+              <span ng-if=" ! hasRoutineTypes.tum_pass_3">
                 None
               </span>
             </dd>
@@ -208,7 +208,7 @@
               <span ng-if="hasRoutineTypes.tum_pass_4 == true">
                 {{ tum_pass_4.name }} (<strong>{{ tum_pass_4.difficulty }}</strong>)
               </span>
-              <span ng-if="hasRoutineTypes.tum_pass_4 == false">
+              <span ng-if=" ! hasRoutineTypes.tum_pass_4">
                 None
               </span>
             </dd>
@@ -217,7 +217,7 @@
       </div>
 
       <div class="row">
-        <button class="btn btn-info" {{action 'editAthlete'}}>Edit</button>
+        <button class="btn btn-info" ng-click="edit()">Edit</button>
       </div>
     </div>
   </div>

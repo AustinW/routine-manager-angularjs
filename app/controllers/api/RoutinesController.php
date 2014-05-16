@@ -58,14 +58,12 @@ class RoutinesController extends BaseController
 
     public function routinesOfType($type)
     {
-        $routines = $this->routineRepository
+        return $this->routineRepository
             ->with('skills')
             ->where('type', $type)
             ->where('user_id', $this->user->getKey())
             ->get()
             ->toArray();
-
-        return compact('routines');
     }
 
     /**

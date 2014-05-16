@@ -1,71 +1,84 @@
-<div class="modal-header">
-    <h3>{{ title }}</h3>
-</div>
-<div class="modal-body">
-    <form class="form-horizontal" role="form">
-        <div class="form-group">
-            <label for="first_name" class="col-sm-4 control-label">First name</label>
+<form class="form-horizontal" role="form" name="athleteForm" ng-submit="save(athleteForm.$valid)" novalidate>
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+    </div>
+    <div class="modal-body">
+
+        <div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
+        
+        <div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+            <label for="first_name" class="col-sm-4 control-label">First name</label><!-- ng-class="{'error': errorFields.indexOf('first_name') != -1}" -->
             <div class="col-sm-8">
-                <input type="text" id="first_name" class="form-control" ng-model="athlete.first_name" />
+                <input type="text" id="first_name" name="first_name" class="form-control" ng-model="athlete.first_name" required>
+                
+                <p ng-show="athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine" class="help-block">Athlete's first name is required.</p>
             </div>
         </div>
-        <div class="form-group">
+
+        <div class="form-group" ng-class="{'has-error' : athleteForm.last_name.$invalid && !athleteForm.last_name.$pristine }">
             <label for="last_name" class="col-sm-4 control-label">Last name</label>
             <div class="col-sm-8">
-                <input type="text" id="last_name" class="form-control" ng-model="athlete.last_name" />
+                <input type="text" id="last_name" name="last_name" class="form-control" ng-model="athlete.last_name" required>
+
+                <p ng-show="athleteForm.last_name.$invalid && !athleteForm.last_name.$pristine" class="help-block">Athlete's last name is required.</p>
             </div>
         </div>
-        <div class="form-group">
+
+        <div class="form-group" ng-class="{'has-error' : athleteForm.gender.$invalid && !athleteForm.gender.$pristine }">
             <label for="gender" class="col-sm-4 control-label"><i class="fa fa-{{ athlete.gender }}"></i> Gender</label>
             <div class="col-sm-8">
-                <select id="gender" ng-model="athlete.gender" ng-options="gender for gender in genders"></select>
+                <select id="gender" name="gender" ng-model="athlete.gender" ng-options="gender for gender in genders" required></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.birthday.$invalid && !athleteForm.birthday.$pristine }">
             <label for="birthday" class="col-sm-4 control-label">Birthday</label>
             <div class="col-sm-8">
-                <input type="text" id="birthday" class="form-control" ng-model="athlete.birthday" />
+                <input type="date" placeholder="yyyy-mm-dd" id="birthday" name="birthday" class="form-control" ng-model="athlete.birthday" required>
+
+                <p ng-show="athleteForm.birthday.$invalid && !athleteForm.birthday.$pristine" class="help-block">Athlete's birthday is required and must be a valid date (yyyy-mm-dd).</p>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.team.$invalid && !athleteForm.team.$pristine }">
             <label for="team" class="col-sm-4 control-label">Team</label>
             <div class="col-sm-8">
-                <input type="text" id="team" class="form-control" ng-model="athlete.team" />
+                <input type="text" id="team" name="team" class="form-control" ng-model="athlete.team" required>
+
+                <p ng-show="athleteForm.team.$invalid && !athleteForm.team.$pristine" class="help-block">Athlete's team is required.</p>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.trampoline_level.$invalid && !athleteForm.trampoline_level.$pristine }">
             <label for="trampoline_level" class="col-sm-4 control-label">Trampoline Level</label>
             <div class="col-sm-8">
-                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.trampolineLevel' class="form-control" }} -->
+                <select id="trampoline_level" name="trampoline_level" ng-model="athlete.trampoline_level" ng-options="level.key as level.value for level in levels"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.synchro_level.$invalid && !athleteForm.synchro_level.$pristine }">
             <label for="synchro_level" class="col-sm-4 control-label">Synchro Level</label>
             <div class="col-sm-8">
-                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.synchroLevel' class="form-control" }} -->
+                <select id="synchro_level" name="synchro_level" ng-model="athlete.synchro_level" ng-options="level.key as level.value for level in levels"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.doublemini_level.$invalid && !athleteForm.doublemini_level.$pristine }">
             <label for="doublemini_level" class="col-sm-4 control-label">Double Mini Level</label>
             <div class="col-sm-8">
-                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.doubleminiLevel' class="form-control" }} -->
+                <select id="doublemini_level" name="doublemini_level" ng-model="athlete.doublemini_level" ng-options="level.key as level.value for level in levels"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.tumbling_level.$invalid && !athleteForm.tumbling_level.$pristine }">
             <label for="tumbling_level" class="col-sm-4 control-label">Tumbling Level</label>
             <div class="col-sm-8">
-                <!-- {{ view Ember.Select content=model.allLevels optionValuePath='content.key' optionLabelPath='content.value' valueBinding='model.tumblingLevel' class="form-control" }} -->
+                <select id="tumbling_level" name="tumbling_level" ng-model="athlete.tumbling_level" ng-options="level.key as level.value for level in levels"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : athleteForm.notes.$invalid && !athleteForm.notes.$pristine }">
             <label for="notes" class="col-sm-4 control-label">Notes</label>
             <div class="col-sm-8">
-                <textarea id="notes" class="form-control" ng-model="athlete.notes"></textarea>
+                <textarea id="notes" name="notes" class="form-control" ng-model="athlete.notes"></textarea>
             </div>
         </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="save()">Save</button>
-    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-</div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-primary" ng-disabled="athleteForm.$invalid" value="Save">
+        <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+    </div>
+</form>

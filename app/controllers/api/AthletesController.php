@@ -89,7 +89,12 @@ class AthletesController extends BaseController
 	{
 		$athlete = $this->athleteRepository->findCheckOwner($id)->first();
 
-		return $athlete->attachRoutinesToAthleteArray();
+		$athlete->trampolineRoutines;
+		$athlete->synchroRoutines;
+		$athlete->doubleminiPasses;
+		$athlete->tumblingPasses;
+
+		return $athlete;
 	}
 
 	/**
@@ -105,17 +110,15 @@ class AthletesController extends BaseController
 
 		$attributes = array_keys($this->athleteRepository->rules());
 
-		$input = Input::json()->get('athlete');
-
 		foreach ($attributes as $key) {
-			if (isset($input[$key])) $athlete->$key = $input[$key];
+			if (Input::has($key)) $athlete->$key = Input::get($key);
 		}
 
 		if ($athlete->isInvalid()) return $athlete->apiErrorResponse();
 		
 		$athlete->save();
 
-		return $athlete->toEmberArray();
+		return $athlete->toArray();
 
 	}
 
@@ -146,14 +149,6 @@ class AthletesController extends BaseController
 			return Response::apiValidationError($validation, $input);
 		}
 
-		$routine = $this->routineRepository->findCheckOwner($routineId)->first();
-
-		if ( ! $routine)
-			return Response::apiNotFoundError(Lang::get('routine.not_found', array('id' => $routineId)));
-
-		if ( ! Routine::correctType($routine->type, $routineType))
-			return Response::apiError(Lang::get('routine.incorrect_type', array('routine_type' => $routine->type, 'specified_routine_type' => $routineType)));
-
 		$athlete = Auth::user()->athletes()
 			->where($this->athleteRepository->getKeyName(), $athleteId)
 			->whereNull('deleted_at')
@@ -161,6 +156,27 @@ class AthletesController extends BaseController
 
 		if ( ! $athlete)
 			return Response::apiNotFoundError(Lang::get('athlete.not_found', array('id' => $athleteId)));
+
+		$routineTypeFilter = function($routine) use($routineType) {
+			return ($routine->pivot->routine_type == $routineType);
+		};
+
+		// Check if an association already exists
+		$previousRoutine = $athlete->routines->filter($routineTypeFilter)->first();
+
+		// If it does, delete it
+		if ($previousRoutine) {
+			$previousRoutine->pivot->delete();
+		}
+
+		// Retrieve the new routine
+		$routine = $this->routineRepository->findCheckOwner($routineId)->first();
+
+		if ( ! $routine)
+			return Response::apiNotFoundError(Lang::get('routine.not_found', array('id' => $routineId)));
+
+		if ( ! Routine::correctType($routine->type, $routineType))
+			return Response::apiError(Lang::get('routine.incorrect_type', array('routine_type' => $routine->type, 'specified_routine_type' => $routineType)));
 
 		try {
 			$athlete->routines()->attach($routine, array('routine_type' => $routineType));
@@ -170,13 +186,16 @@ class AthletesController extends BaseController
 				'possessive'   => $athlete->possessive()
 			)), 400);
 		}
-		
+
 		return Response::apiMessage(Lang::get('routine.associated', array(
 			'routine_name' => $routine->name,
 			'athlete_name' => $athlete->name(),
 			'routine_type' => Routine::descriptiveRoutineType($routineType),
 			'possessive'   => $athlete->possessive(),
-		)));
+		)), array(
+			'routine' => $athlete->routineOfType($routineType)->toArray(),
+			'routine_type' => $routineType
+		));
 	}
 
 	public function deleteAssociation($athleteId, $routineType)
@@ -193,7 +212,7 @@ class AthletesController extends BaseController
 
 		$routine = $athlete->routines->filter(function($routine) use($routineType) {
 			return ($routine->pivot->routine_type == $routineType) ? $routine : null;
-		})->get(1);
+		})->first();
 
 		$messageParams = array(
 			'name'         => $athlete->name(),
@@ -201,7 +220,7 @@ class AthletesController extends BaseController
 		);
 		
 		if ($routine && $routine->pivot->delete()) {
-			return Response::apiMessage(Lang::get('routine.unassociated', $messageParams));
+			return Response::apiMessage(Lang::get('routine.unassociated', $messageParams), array('routine_type' => $routineType));
 		} else {
 			return Response::apiError(Lang::get('routine.unassociate_failed', $messageParams));
 		}
@@ -302,7 +321,7 @@ class AthletesController extends BaseController
 		), $athleteId, Auth::user());
 		
 		if ($athlete && $athlete->routines) {
-			return $athlete->routines->toEmberArray();
+			return $athlete->routines->toArray();
 		} else {
 			return Response::apiError(Lang::get('athlete.not_found', array('id' => $athleteId)), 404);
 		}

@@ -1,6 +1,17 @@
 var routineManagerDirectives = angular.module('routineManager.directives', []);
 
 routineManagerDirectives
+    .directive('trampolineRoutine', [
+
+        function() {
+            return {
+                templateUrl: '/app/views/directives/trampoline-routine.html',
+                scope: {
+                    routine: '='
+                }
+            }
+        }
+    ])
     .directive('pwCheck', [
 
         function() {

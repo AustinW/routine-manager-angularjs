@@ -11,4 +11,4 @@
 |
 */
 
-Artisan::add(new DeployCommand);
+// Artisan::add(new DeployCommand);
