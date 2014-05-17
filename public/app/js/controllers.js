@@ -90,16 +90,31 @@ routineManagerControllers
             $scope.chooseTrampoline = function() {
                 var modalInstance = $modal.open({
                     templateUrl: '/app/views/modals/choose/trampoline.html',
-                    controller: 'AthleteChooseTrampolineCtrl',
+                    controller: 'AthleteChooseRoutineCtrl',
                     size: 'lg',
                     resolve: {
                         athlete: function() {
                             return $scope.athlete;
                         },
-                        trampolineRoutines: function() {
+                        routines: function() {
                             return RoutineService.allTrampoline().then(function(routines) {
                                 return routines;
                             });
+                        },
+                        theEvent: function() {
+                            return {
+                                name: 'trampoline',
+                                nameTitle: 'Trampoline',
+                                routinesKey: 'trampoline_routines'
+                            };
+                        },
+                        selectedRoutines: function() {
+                            return {
+                                tra_prelim_compulsory: 0,
+                                tra_prelim_optional: 0,
+                                tra_semi_final_optional: 0,
+                                tra_final_optional: 0
+                            };
                         }
                     }
                 });
@@ -146,41 +161,48 @@ routineManagerControllers
             };
         }
     ])
-    .controller('AthleteChooseTrampolineCtrl', ['$scope', '$modalInstance', '$location', '$filter', '$q', 'Restangular', 'athlete', 'trampolineRoutines', 'LEVELS', 'AthleteService',
-        function($scope, $modalInstance, $location, $filter, $q, Restangular, originalAthlete, trampolineRoutines, LEVELS, AthleteService, getRoutine) {
+    .controller('AthleteChooseRoutineCtrl', [
+        '$scope',
+        '$modalInstance',
+        '$filter',
+        '$q',
+        'Restangular',
+        'athlete',
+        'routines',
+        'AthleteService',
+        'selectedRoutines',
+        'theEvent',
+
+        function($scope, $modalInstance, $filter, $q, Restangular, originalAthlete, routines, AthleteService, selectedRoutines, theEvent) {
 
             $scope.athlete = originalAthlete;
 
-            // Refactor
-            $scope.trampolineRoutines = trampolineRoutines;
-            // Refactor
-            $scope.trampolineRoutines.unshift({
+            // Refactor done
+            $scope.routines = routines;
+
+            // Refactor done
+            $scope.routines.unshift({
                 id: 0,
                 name: 'None'
             });
 
             $scope.activeRoutine = 0;
 
-            // Refactor
-            $scope.routines = {
-                tra_prelim_compulsory: 0,
-                tra_prelim_optional: 0,
-                tra_semi_final_optional: 0,
-                tra_final_optional: 0
-            };
+            // Refactor done
+            $scope.chosenRoutines = selectedRoutines;
 
-            // Refactor
-            _.each($scope.athlete.trampoline_routines, function(routine) {
+            // Refactor done
+            _.each($scope.athlete[theEvent.routinesKey], function(routine) {
                 if (routine && routine.pivot && routine.pivot.routine_type)
-                    $scope.routines[routine.pivot.routine_type] = routine.id;
+                    $scope.chosenRoutines[routine.pivot.routine_type] = routine.id;
             });
 
-            // Refactor
-            $scope.title = 'Choose Trampoline Routines';
+            // Refactor done
+            $scope.title = 'Choose ' + theEvent.nameTitle + ' Routines';
 
-            // Refactor
-            $scope.selectedRoutine = function(routineId) {
-                $scope.activeRoutine = $filter('getById')($scope.trampolineRoutines, routineId);
+            // Refactor done
+            $scope.showRoutine = function(routineId) {
+                $scope.activeRoutine = $filter('getById')($scope.routines, routineId);
             };
 
             $scope.save = function(isValid) {
@@ -189,10 +211,10 @@ routineManagerControllers
 
                     var promises = [];
 
-                    _.each($scope.routines, function(athleteChosenRoutine, routineType) {
-
-                        // Refactor
-                        var athleteCurrentRoutine = $filter('getRoutine')($scope.athlete.trampoline_routines, routineType) || {
+                    _.each($scope.chosenRoutines, function(athleteChosenRoutine, routineType) {
+                        console.log(athleteChosenRoutine);
+                        // Refactor done
+                        var athleteCurrentRoutine = $filter('getRoutine')($scope.athlete[theEvent.routinesKey], routineType) || {
                             id: 0
                         };
 
@@ -207,9 +229,8 @@ routineManagerControllers
                     });
 
                     $q.all(promises).then(function(results) {
-                        // Refactor
-                        Restangular.one('athletes', $scope.athlete.id).getList('trampoline').then(function(routines) {
-                            console.log(routines);
+                        // Refactor done
+                        Restangular.one('athletes', $scope.athlete.id).getList(theEvent.name).then(function(routines) {
                             $modalInstance.close(routines);
                         });
                     });

@@ -22,40 +22,40 @@
                 <select
                     id         = "tra_prelim_compulsory"
                     name       = "tra_prelim_compulsory"
-                    ng-model   = "routines.tra_prelim_compulsory"
-                    ng-options = "routine.id as routine.name for routine in trampolineRoutines"
-                    ng-change  = "selectedRoutine(routines.tra_prelim_compulsory)"
-                    ng-focus  = "selectedRoutine(routines.tra_prelim_compulsory)"
+                    ng-model   = "chosenRoutines.tra_prelim_compulsory"
+                    ng-options = "routine.id as routine.name for routine in routines"
+                    ng-change  = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
+                    ng-focus  = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
                 ></select>
 
                 <label for="tra_prelim_optional">Prelim optional:</label>
                 <select
                     id         = "tra_prelim_optional"
                     name       = "tra_prelim_optional"
-                    ng-model   = "routines.tra_prelim_optional"
-                    ng-options = "routine.id as routine.name for routine in trampolineRoutines"
-                    ng-change  = "selectedRoutine(routines.tra_prelim_optional)"
-                    ng-focus  = "selectedRoutine(routines.tra_prelim_optional)"
+                    ng-model   = "chosenRoutines.tra_prelim_optional"
+                    ng-options = "routine.id as routine.name for routine in routines"
+                    ng-change  = "showRoutine(chosenRoutines.tra_prelim_optional)"
+                    ng-focus  = "showRoutine(chosenRoutines.tra_prelim_optional)"
                 ></select>
 
                 <label for="tra_semi_final_optional">Prelim semi-final optional:</label>
                 <select
                     id         = "tra_semi_final_optional"
                     name       = "tra_semi_final_optional"
-                    ng-model   = "routines.tra_semi_final_optional"
-                    ng-options = "routine.id as routine.name for routine in trampolineRoutines"
-                    ng-change  = "selectedRoutine(routines.tra_semi_final_optional)"
-                    ng-focus  = "selectedRoutine(routines.tra_semi_final_optional)"
+                    ng-model   = "chosenRoutines.tra_semi_final_optional"
+                    ng-options = "routine.id as routine.name for routine in routines"
+                    ng-change  = "showRoutine(chosenRoutines.tra_semi_final_optional)"
+                    ng-focus  = "showRoutine(chosenRoutines.tra_semi_final_optional)"
                 ></select>
 
                 <label for="tra_final_optional">Prelim final optional:</label>
                 <select
                     id         = "tra_final_optional"
                     name       = "tra_final_optional"
-                    ng-model   = "routines.tra_final_optional"
-                    ng-options = "routine.id as routine.name for routine in trampolineRoutines"
-                    ng-change  = "selectedRoutine(routines.tra_final_optional)"
-                    ng-focus  = "selectedRoutine(routines.tra_final_optional)"
+                    ng-model   = "chosenRoutines.tra_final_optional"
+                    ng-options = "routine.id as routine.name for routine in routines"
+                    ng-change  = "showRoutine(chosenRoutines.tra_final_optional)"
+                    ng-focus  = "showRoutine(chosenRoutines.tra_final_optional)"
                 ></select>
             </div>
 
