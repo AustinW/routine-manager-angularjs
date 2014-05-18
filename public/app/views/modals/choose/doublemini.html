@@ -1,4 +1,4 @@
-<form class="form" role="form" name="chooseTrampolineRoutines" ng-submit="save(chooseTrampolineRoutines.$valid)" novalidate>
+<form class="form" role="form" name="chooseDoubleMiniPasses" ng-submit="save(chooseDoubleMiniPasses.$valid)" novalidate>
     <div class="modal-header">
         <h3>{{ title }}</h3>
     </div>
@@ -19,68 +19,66 @@
             <!-- Chooser -->
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label for="tra_prelim_compulsory">Prelim compulsory:</label>
+                    <label for="dmt_pass_1">Pass 1:</label>
                     <select
                         class      = "form-control"
-                        id         = "tra_prelim_compulsory"
-                        name       = "tra_prelim_compulsory"
-                        ng-model   = "chosenRoutines.tra_prelim_compulsory"
+                        id         = "dmt_pass_1"
+                        name       = "dmt_pass_1"
+                        ng-model   = "chosenRoutines.dmt_pass_1"
                         ng-options = "routine.id as routine.name for routine in routines"
-                        ng-change  = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
-                        ng-focus   = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
+                        ng-change  = "showRoutine(chosenRoutines.dmt_pass_1)"
+                        ng-focus   = "showRoutine(chosenRoutines.dmt_pass_1)"
+                    ></select>
+                </div>
+                <div class="form-group">
+                    <label for="dmt_pass_2">Pass 2:</label>
+                    <select
+                        class      = "form-control"
+                        id         = "dmt_pass_2"
+                        name       = "dmt_pass_2"
+                        ng-model   = "chosenRoutines.dmt_pass_2"
+                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-change  = "showRoutine(chosenRoutines.dmt_pass_2)"
+                        ng-focus   = "showRoutine(chosenRoutines.dmt_pass_2)"
                     ></select>
                 </div>
 
                 <div class="form-group">
-                    <label for="tra_prelim_optional">Prelim optional:</label>
+                    <label for="dmt_pass_3">Pass 3:</label>
                     <select
                         class      = "form-control"
-                        id         = "tra_prelim_optional"
-                        name       = "tra_prelim_optional"
-                        ng-model   = "chosenRoutines.tra_prelim_optional"
+                        id         = "dmt_pass_3"
+                        name       = "dmt_pass_3"
+                        ng-model   = "chosenRoutines.dmt_pass_3"
                         ng-options = "routine.id as routine.name for routine in routines"
-                        ng-change  = "showRoutine(chosenRoutines.tra_prelim_optional)"
-                        ng-focus   = "showRoutine(chosenRoutines.tra_prelim_optional)"
+                        ng-change  = "showRoutine(chosenRoutines.dmt_pass_3)"
+                        ng-focus   = "showRoutine(chosenRoutines.dmt_pass_3)"
                     ></select>
                 </div>
-
                 <div class="form-group">
-                    <label for="tra_semi_final_optional">Semi-final optional:</label>
+                    <label for="dmt_pass_4">Pass 4:</label>
                     <select
                         class      = "form-control"
-                        id         = "tra_semi_final_optional"
-                        name       = "tra_semi_final_optional"
-                        ng-model   = "chosenRoutines.tra_semi_final_optional"
+                        id         = "dmt_pass_4"
+                        name       = "dmt_pass_4"
+                        ng-model   = "chosenRoutines.dmt_pass_4"
                         ng-options = "routine.id as routine.name for routine in routines"
-                        ng-change  = "showRoutine(chosenRoutines.tra_semi_final_optional)"
-                        ng-focus   = "showRoutine(chosenRoutines.tra_semi_final_optional)"
-                    ></select>
-                </div>
-
-                <div class="form-group">
-                    <label for="tra_final_optional">Final optional:</label>
-                    <select
-                        class      = "form-control"
-                        id         = "tra_final_optional"
-                        name       = "tra_final_optional"
-                        ng-model   = "chosenRoutines.tra_final_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
-                        ng-change  = "showRoutine(chosenRoutines.tra_final_optional)"
-                        ng-focus   = "showRoutine(chosenRoutines.tra_final_optional)"
+                        ng-change  = "showRoutine(chosenRoutines.dmt_pass_4)"
+                        ng-focus   = "showRoutine(chosenRoutines.dmt_pass_4)"
                     ></select>
                 </div>
             </div>
 
             <!-- Viewer -->
             <div class="col-sm-7" style="border-left:1px solid #eee">
-                <div trampoline-routine routine="activeRoutine"></div>
+                <div doublemini-pass pass="activeRoutine"></div>
             </div>
 
         </div>
 
     </div>
     <div class="modal-footer">
-        <input type="submit" class="btn btn-primary" ng-disabled="chooseTrampolineRoutines.$invalid" value="Save">
+        <input type="submit" class="btn btn-primary" ng-disabled="chooseDoubleMiniPasses.$invalid" value="Save">
         <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
     </div>
 </form>

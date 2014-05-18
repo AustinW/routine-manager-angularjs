@@ -18,15 +18,15 @@ class Routine extends \BaseModel
 		'tra_semi_final_optional',
 		'tra_final_optional',
 
-		'dmt_pass1',
-		'dmt_pass2',
-		'dmt_pass3',
-		'dmt_pass4',
+		'dmt_pass_1',
+		'dmt_pass_2',
+		'dmt_pass_3',
+		'dmt_pass_4',
 
-		'tum_pass1',
-		'tum_pass2',
-		'tum_pass3',
-		'tum_pass4',
+		'tum_pass_1',
+		'tum_pass_2',
+		'tum_pass_3',
+		'tum_pass_4',
 
 		'syn_prelim_compulsory',
 		'syn_prelim_optional',
@@ -155,15 +155,15 @@ class Routine extends \BaseModel
 		$routineTypes['tra_semi_final_optional'] = 'trampoline';
 		$routineTypes['tra_final_optional']      = 'trampoline';
 
-		$routineTypes['dmt_pass1'] = 'doublemini';
-		$routineTypes['dmt_pass2'] = 'doublemini';
-		$routineTypes['dmt_pass3'] = 'doublemini';
-		$routineTypes['dmt_pass4'] = 'doublemini';
+		$routineTypes['dmt_pass_1'] = 'doublemini';
+		$routineTypes['dmt_pass_2'] = 'doublemini';
+		$routineTypes['dmt_pass_3'] = 'doublemini';
+		$routineTypes['dmt_pass_4'] = 'doublemini';
 
-		$routineTypes['tum_pass1'] = 'tumbling';
-		$routineTypes['tum_pass2'] = 'tumbling';
-		$routineTypes['tum_pass3'] = 'tumbling';
-		$routineTypes['tum_pass4'] = 'tumbling';
+		$routineTypes['tum_pass_1'] = 'tumbling';
+		$routineTypes['tum_pass_2'] = 'tumbling';
+		$routineTypes['tum_pass_3'] = 'tumbling';
+		$routineTypes['tum_pass_4'] = 'tumbling';
 
 		$routineTypes['syn_prelim_compulsory']   = 'synchro';
 		$routineTypes['syn_prelim_optional']     = 'synchro';

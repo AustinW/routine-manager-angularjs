@@ -9,7 +9,7 @@ use Routine;
 use User, Athlete;
 
 // Laravel Facades
-use Validator, Input, Auth, Response, Lang, Str;
+use Validator, Input, Auth, Response, Lang, Str, DB;
 
 // Laravel Classes
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -211,15 +211,19 @@ class AthletesController extends BaseController
 		$athlete = $this->athleteRepository->findCheckOwner($athleteId)->first();
 
 		$routine = $athlete->routines->filter(function($routine) use($routineType) {
-			return ($routine->pivot->routine_type == $routineType) ? $routine : null;
+			// var_dump($routine->pivot->routine_type === $routineType);
+			return ($routine->pivot->routine_type === $routineType) ? $routine : null;
 		})->first();
+		// dd($routine->pivot->toArray());
 
 		$messageParams = array(
 			'name'         => $athlete->name(),
 			'routine_type' => Routine::descriptiveRoutineType($routineType)
 		);
+
+		$result = DB::table('athlete_routine')->where('athlete_id', $athlete->id)->where('routine_id', $routine->id)->where('routine_type', $routineType)->delete();
 		
-		if ($routine && $routine->pivot->delete()) {
+		if ($result) {
 			return Response::apiMessage(Lang::get('routine.unassociated', $messageParams), array('routine_type' => $routineType));
 		} else {
 			return Response::apiError(Lang::get('routine.unassociate_failed', $messageParams));

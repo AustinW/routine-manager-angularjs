@@ -98,9 +98,9 @@ Route::group(array('prefix' => 'api', 'namespace' => 'Api'), function() {
 	Route::controller('user', 'UserController');
 
 	Route::put('athletes/{athleteId}/{routineType}/{routineId}', 'AthletesController@putAssociate')
-		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z_]+', 'routineId' => '[0-9]+'));
+		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z0-9_]+', 'routineId' => '[0-9]+'));
 	Route::delete('athletes/{athleteId}/{routineType}', 'AthletesController@deleteAssociation')
-		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z_]+'));
+		->where(array('athleteId' => '[0-9]+', 'routineType' => '[a-z0-9_]+'));
 
 	Route::put('athletes/{athlete}/synchro-partner/{partner}', 'AthletesController@putAssociateSynchroPartner')
 		->where(array('athleteId' => '[0-9]+', 'partnerId' => '[0-9]+'));

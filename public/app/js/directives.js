@@ -12,6 +12,17 @@ routineManagerDirectives
             }
         }
     ])
+    .directive('doubleminiPass', [
+
+        function() {
+            return {
+                templateUrl: '/app/views/directives/doublemini-pass.html',
+                scope: {
+                    pass: '='
+                }
+            }
+        }
+    ])
     .directive('pwCheck', [
 
         function() {

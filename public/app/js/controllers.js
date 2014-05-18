@@ -87,44 +87,13 @@ routineManagerControllers
                 });
             };
 
-            $scope.chooseTrampoline = function() {
-                var modalInstance = $modal.open({
-                    templateUrl: '/app/views/modals/choose/trampoline.html',
-                    controller: 'AthleteChooseRoutineCtrl',
-                    size: 'lg',
-                    resolve: {
-                        athlete: function() {
-                            return $scope.athlete;
-                        },
-                        routines: function() {
-                            return RoutineService.allTrampoline().then(function(routines) {
-                                return routines;
-                            });
-                        },
-                        theEvent: function() {
-                            return {
-                                name: 'trampoline',
-                                nameTitle: 'Trampoline',
-                                routinesKey: 'trampoline_routines'
-                            };
-                        },
-                        selectedRoutines: function() {
-                            return {
-                                tra_prelim_compulsory: 0,
-                                tra_prelim_optional: 0,
-                                tra_semi_final_optional: 0,
-                                tra_final_optional: 0
-                            };
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(newlyAssignedRoutines) {
-                    $scope.athlete.trampoline_routines = newlyAssignedRoutines;
+            var resolveNewRoutines = function(eventKey) {
+                return function(routinesForEvent) {
+                    $scope.athlete[eventKey] = routinesForEvent;
 
                     $scope.hasRoutineTypes = [];
 
-                    _.each($scope.athlete.trampoline_routines, function(routine) {
+                    _.each($scope.athlete[eventKey], function(routine) {
                         if (routine && routine.pivot) {
                             var routineType = routine.pivot.routine_type;
 
@@ -132,8 +101,58 @@ routineManagerControllers
                             $scope.hasRoutineTypes[routineType] = true;
                         }
                     });
-                });
+                };
             };
+
+            var chooseRoutineModal = function(eventParams, specificRoutines) {
+                return function() {
+                    var modalInstance = $modal.open({
+                        templateUrl: '/app/views/modals/choose/' + eventParams.key + '.html',
+                        controller: 'AthleteChooseRoutineCtrl',
+                        size: 'lg',
+                        resolve: {
+                            athlete: function() {
+                                return $scope.athlete;
+                            },
+                            routines: function() {
+                                return RoutineService.allOf(eventParams.key).then(function(routines) {
+                                    return routines;
+                                });
+                            },
+                            theEvent: function() {
+                                return eventParams;
+                            },
+                            selectedRoutines: function() {
+                                return specificRoutines;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(resolveNewRoutines(eventParams.routinesKey));
+                };
+            };
+
+            $scope.chooseTrampoline = chooseRoutineModal({
+                key: 'trampoline',
+                title: 'Trampoline',
+                routinesKey: 'trampoline_routines'
+            }, {
+                tra_prelim_compulsory: 0,
+                tra_prelim_optional: 0,
+                tra_semi_final_optional: 0,
+                tra_final_optional: 0
+            });
+
+            $scope.chooseDoubleMini = chooseRoutineModal({
+                key: 'doublemini',
+                title: 'Double Mini',
+                routinesKey: 'doublemini_passes'
+            }, {
+                dmt_pass_1: 0,
+                dmt_pass_2: 0,
+                dmt_pass_3: 0,
+                dmt_pass_4: 0
+            });
 
             _.each(ROUTINES, function(routineType) {
                 $scope.hasRoutineTypes[routineType] = false;
@@ -177,10 +196,8 @@ routineManagerControllers
 
             $scope.athlete = originalAthlete;
 
-            // Refactor done
             $scope.routines = routines;
 
-            // Refactor done
             $scope.routines.unshift({
                 id: 0,
                 name: 'None'
@@ -188,19 +205,15 @@ routineManagerControllers
 
             $scope.activeRoutine = 0;
 
-            // Refactor done
             $scope.chosenRoutines = selectedRoutines;
 
-            // Refactor done
             _.each($scope.athlete[theEvent.routinesKey], function(routine) {
                 if (routine && routine.pivot && routine.pivot.routine_type)
                     $scope.chosenRoutines[routine.pivot.routine_type] = routine.id;
             });
 
-            // Refactor done
-            $scope.title = 'Choose ' + theEvent.nameTitle + ' Routines';
+            $scope.title = 'Choose ' + theEvent.title + ' Routines';
 
-            // Refactor done
             $scope.showRoutine = function(routineId) {
                 $scope.activeRoutine = $filter('getById')($scope.routines, routineId);
             };
@@ -212,8 +225,7 @@ routineManagerControllers
                     var promises = [];
 
                     _.each($scope.chosenRoutines, function(athleteChosenRoutine, routineType) {
-                        console.log(athleteChosenRoutine);
-                        // Refactor done
+
                         var athleteCurrentRoutine = $filter('getRoutine')($scope.athlete[theEvent.routinesKey], routineType) || {
                             id: 0
                         };
@@ -229,8 +241,8 @@ routineManagerControllers
                     });
 
                     $q.all(promises).then(function(results) {
-                        // Refactor done
-                        Restangular.one('athletes', $scope.athlete.id).getList(theEvent.name).then(function(routines) {
+
+                        Restangular.one('athletes', $scope.athlete.id).getList(theEvent.key).then(function(routines) {
                             $modalInstance.close(routines);
                         });
                     });

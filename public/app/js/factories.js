@@ -90,6 +90,12 @@ routineManagerFactories
                     return Restangular.all('routines').getList();
                 },
 
+                allOf: function(eventName) {
+                    return Restangular.all('routines').getList({
+                        type: eventName
+                    });
+                },
+
                 allTrampoline: function() {
                     return Restangular.all('routines').getList({
                         type: 'trampoline'
