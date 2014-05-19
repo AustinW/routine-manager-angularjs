@@ -27,10 +27,22 @@ routineManagerControllers
 
         }
     ])
-    .controller('AthleteListCtrl', ['$scope', 'AthleteService', 'Restangular', 'LEVELS',
-        function($scope, AthleteService, Restangular, LEVELS) {
+    .controller('AthleteListCtrl', ['$scope', '$window', 'AthleteService', 'Restangular',
+        function($scope, $window, AthleteService, Restangular) {
 
             $scope.levelLabel = AthleteService.levelLabel;
+
+            $scope.allCompcards = true;
+
+            AthleteService.findAll().then(function(athletes) {
+
+                $scope.athletes = athletes;
+
+                _.each(athletes, function(athlete) {
+
+                    athlete.compcard = true;
+                });
+            });
 
             $scope.delete = function(athlete) {
                 if (confirm('Are you sure you wish to delete this athlete?')) {
@@ -40,11 +52,31 @@ routineManagerControllers
                 }
             };
 
-            $scope.athletes = AthleteService.findAll();
+            $scope.selectAllCompcards = function() {
+                _.each($scope.athletes, function(athlete) {
+                    athlete.compcard = $scope.allCompcards;
+                });
+            };
+
+            $scope.downloadCompcards = function() {
+                var athletesToDownload = _.filter($scope.athletes, function(athlete) {
+                    return athlete.compcard;
+                });
+
+                $window.location.href = '/api/compcard?athletes=' + _.pluck(athletesToDownload, 'id').join(',');
+            };
+
+            $scope.athletesToDownloadCount = function() {
+                var count = _.filter($scope.athletes, function(athlete) {
+                    return athlete.compcard;
+                }).length;
+
+                return count == 0;
+            }
         }
     ])
-    .controller('AthleteViewCtrl', ['$scope', '$modal', '$stateParams', 'AthleteService', 'RoutineService', 'Restangular', 'LEVELS', 'ROUTINES',
-        function($scope, $modal, $stateParams, AthleteService, RoutineService, Restangular, LEVELS, ROUTINES) {
+    .controller('AthleteViewCtrl', ['$scope', '$modal', '$stateParams', '$window', 'AthleteService', 'RoutineService', 'Restangular', 'ROUTINES',
+        function($scope, $modal, $stateParams, $window, AthleteService, RoutineService, Restangular, ROUTINES) {
 
             $scope.levelLabel = AthleteService.levelLabel;
 
@@ -54,7 +86,7 @@ routineManagerControllers
 
             $scope.athlete = null;
 
-            $scope.athletes = AthleteService.findAll();
+            $scope.athletes = AthleteService.findAll().$object;
 
             AthleteService.findOne($stateParams.athlete_id).then(function(athlete) {
 
@@ -73,6 +105,10 @@ routineManagerControllers
                 athlete: function() {
                     return $scope.athlete;
                 }
+            };
+
+            $scope.downloadCompcards = function() {
+                $window.location.href = '/api/compcard?athletes=' + $scope.athlete.id;
             };
 
             $scope.edit = function() {
@@ -115,7 +151,8 @@ routineManagerControllers
                                 return $scope.athlete;
                             },
                             routines: function() {
-                                return RoutineService.allOf(eventParams.key).then(function(routines) {
+                                var routineSource = eventParams.routineSource || eventParams.key;
+                                return RoutineService.allOf(routineSource).then(function(routines) {
                                     return routines;
                                 });
                             },
@@ -143,6 +180,17 @@ routineManagerControllers
                 tra_final_optional: 0
             });
 
+            $scope.chooseSynchro = chooseRoutineModal({
+                key: 'synchro',
+                routineSource: 'trampoline',
+                title: 'Synchro',
+                routinesKey: 'synchro_routines'
+            }, {
+                sync_prelim_compulsory: 0,
+                sync_prelim_optional: 0,
+                sync_final_optional: 0
+            });
+
             $scope.chooseDoubleMini = chooseRoutineModal({
                 key: 'doublemini',
                 title: 'Double Mini',
@@ -154,9 +202,35 @@ routineManagerControllers
                 dmt_pass_4: 0
             });
 
+            $scope.chooseTumbling = chooseRoutineModal({
+                key: 'tumbling',
+                title: 'Tumbling',
+                routinesKey: 'tumbling_passes'
+            }, {
+                tum_pass_1: 0,
+                tum_pass_2: 0,
+                tum_pass_3: 0,
+                tum_pass_4: 0
+            });
+
             _.each(ROUTINES, function(routineType) {
                 $scope.hasRoutineTypes[routineType] = false;
             });
+        }
+    ])
+    .controller('RoutineNewCtrl', ['$scope', '$modal', 'Restangular',
+        function($scope, $modal, Restangular) {
+            $scope.openTrampoline = function() {
+
+            };
+
+            $scope.openDoubleMini = function() {
+
+            };
+
+            $scope.openTumbling = function() {
+
+            };
         }
     ])
     .controller('AthleteNewCtrl', ['$scope', '$modal', 'Restangular', 'LEVELS', '$log',

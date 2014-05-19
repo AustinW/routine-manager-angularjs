@@ -1,0 +1,73 @@
+<form class="form" role="form" name="chooseTrampolineRoutines" ng-submit="save(chooseSynchroRoutines.$valid)" novalidate>
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+    </div>
+    <div class="modal-body">
+
+        <div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
+        
+        <!-- <div class="form-group" ng-class="{'has-error' : chooseTrampolineRoutines.first_name.$invalid && !chooseTrampolineRoutines.first_name.$pristine }">
+            <label for="first_name" class="col-sm-4 control-label">First name</label>
+            <div class="col-sm-8">
+                <input type="text" id="first_name" name="first_name" class="form-control" ng-model="athlete.first_name" required>
+                
+                <p ng-show="chooseTrampolineRoutines.first_name.$invalid && !chooseTrampolineRoutines.first_name.$pristine" class="help-block">Athlete's first name is required.</p>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <!-- Chooser -->
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label for="sync_prelim_compulsory">Prelim compulsory:</label>
+                    <select
+                        class      = "form-control"
+                        id         = "sync_prelim_compulsory"
+                        name       = "sync_prelim_compulsory"
+                        ng-model   = "chosenRoutines.sync_prelim_compulsory"
+                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-change  = "showRoutine(chosenRoutines.sync_prelim_compulsory)"
+                        ng-focus   = "showRoutine(chosenRoutines.sync_prelim_compulsory)"
+                    ></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sync_prelim_optional">Prelim optional:</label>
+                    <select
+                        class      = "form-control"
+                        id         = "sync_prelim_optional"
+                        name       = "sync_prelim_optional"
+                        ng-model   = "chosenRoutines.sync_prelim_optional"
+                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-change  = "showRoutine(chosenRoutines.sync_prelim_optional)"
+                        ng-focus   = "showRoutine(chosenRoutines.sync_prelim_optional)"
+                    ></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sync_final_optional">Final optional:</label>
+                    <select
+                        class      = "form-control"
+                        id         = "sync_final_optional"
+                        name       = "sync_final_optional"
+                        ng-model   = "chosenRoutines.sync_final_optional"
+                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-change  = "showRoutine(chosenRoutines.sync_final_optional)"
+                        ng-focus   = "showRoutine(chosenRoutines.sync_final_optional)"
+                    ></select>
+                </div>
+            </div>
+
+            <!-- Viewer -->
+            <div class="col-sm-7" style="border-left:1px solid #eee">
+                <div trampoline-routine routine="activeRoutine"></div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-primary" ng-disabled="chooseTrampolineRoutines.$invalid" value="Save">
+        <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+    </div>
+</form>

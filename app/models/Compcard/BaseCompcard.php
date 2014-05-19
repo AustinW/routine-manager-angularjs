@@ -69,7 +69,6 @@ class BaseCompcard
 				$this->mapRoutine($routine, $fields, $routine->routineType());
 			
 			}
-
 		}
 	}
 
@@ -103,6 +102,6 @@ class BaseCompcard
 
 		$compcardLevel = ($level == 'jr' || $level == 'sr') ? 'elite' : 'jo';
 
-		return Config::get(sprintf('app.compcards.source.%s.%s', $compcardLevel, $event));
+		return Config::get(sprintf('app.compcards.source.2014.%s', $event));
 	}
 }

@@ -30,7 +30,7 @@ class CompcardMapper
 
 	public function setField($key, $value)
 	{
-		$this->mappedFields[$key] = $value;
+		$this->mappedFields[$key] = iconv("UTF-8","cp874",$value);
 	}
 
 	public function assignField($key, $value, $index = null)
@@ -38,9 +38,9 @@ class CompcardMapper
 		$fieldName = array_get($this->eventFields, $key);
 
 		if ($index !== null)
-			$this->mappedFields[$fieldName[$index]] = $value;
+			$this->mappedFields[$fieldName[$index]] = utf8_encode($value);
 		else
-			$this->mappedFields[$fieldName] = $value;
+			$this->mappedFields[$fieldName] = utf8_encode($value);
 	}
 
 	public function massAssign(Routine $routine, $routineType) {}

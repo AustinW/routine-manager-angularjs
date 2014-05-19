@@ -21,15 +21,15 @@ class TrampolineCompcardMapper extends CompcardMapper
 		),
 
 		'tra_semi_final_optional' => array(
-			'fig'   => array(),
-			'dd'    => array(),
-			'total' => array(),
-		),
-
-		'tra_final_optional' => array(
 			'fig'   => array('SKILLS1_3', 'SKILLS2_3', 'SKILLS3_3', 'SKILLS4_3', 'SKILLS5_3', 'SKILLS6_3', 'SKILLS7_3', 'SKILLS8_3', 'SKILLS9_3', 'SKILLS10_3'),
 			'dd'    => array('DD1_3', 'DD2_3', 'DD3_3', 'DD4_3', 'DD5_3', 'DD6_3', 'DD7_3', 'DD8_3', 'DD9_3', 'DD10_3'),
 			'total' => array('DDTOTAL_3'),
+		),
+
+		'tra_final_optional' => array(
+			'fig'   => array('SKILLS1_4', 'SKILLS2_4', 'SKILLS3_4', 'SKILLS4_4', 'SKILLS5_4', 'SKILLS6_4', 'SKILLS7_4', 'SKILLS8_4', 'SKILLS9_4', 'SKILLS10_4'),
+			'dd'    => array('DD1_4', 'DD2_4', 'DD3_4', 'DD4_4', 'DD5_4', 'DD6_4', 'DD7_4', 'DD8_4', 'DD9_4', 'DD10_4'),
+			'total' => array('DDTOTAL_4'),
 		),
 	);
 

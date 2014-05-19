@@ -23,6 +23,17 @@ routineManagerDirectives
             }
         }
     ])
+    .directive('tumblingPass', [
+
+        function() {
+            return {
+                templateUrl: '/app/views/directives/tumbling-pass.html',
+                scope: {
+                    pass: '='
+                }
+            }
+        }
+    ])
     .directive('pwCheck', [
 
         function() {

@@ -35,7 +35,7 @@
 						<ul class="dropdown-menu">
 							<li ng-controller="AthleteNewCtrl"><a href="#" ng-click="open()">New</a></li>
 							<li><a href="/athletes">View</a></li>
-							<li><a href="#">Search</a></li>
+							<!-- <li><a href="#">Search</a></li> -->
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -43,14 +43,13 @@
 						<ul class="dropdown-menu">
 							<li>
 								<a href="#">New</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Trampoline</a></li>
-									<li><a href="#">Synchro</a></li>
-									<li><a href="#">Double-Mini</a></li>
-									<li><a href="#">Tumbling</a></li>
+								<ul class="dropdown-menu" ng-controller="RoutineNewCtrl">
+									<li><a href="#" ng-click="openTrampoline()">Trampoline</a></li>
+									<li><a href="#" ng-click="openDoubleMini()">Double-Mini</a></li>
+									<li><a href="#" ng-click="openTumbling()">Tumbling</a></li>
 								</ul>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#">View</a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Trampoline</a></li>
@@ -58,8 +57,8 @@
 									<li><a href="#">Double-Mini</a></li>
 									<li><a href="#">Tumbling</a></li>
 								</ul>
-							</li>
-							<li><a href="#">Search</a></li>
+							</li> -->
+							<!-- <li><a href="#">Search</a></li> -->
 						</ul>
 					</li>
 					<li class="dropdown">

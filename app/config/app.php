@@ -107,6 +107,9 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		// Workbench
+		'Austinw\Pdfdf\PdfdfServiceProvider',
+
 		'Chumper\Zipper\ZipperServiceProvider',
 		'Tappleby\AuthToken\AuthTokenServiceProvider',
 
@@ -194,6 +197,12 @@ return array(
 
 	'compcards' => array(
 		'source' => array(
+			'2014' => array(
+				'trampoline' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . '2014_comp_card_trampoline.pdf',
+				'synchro'    => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . '2014_comp_card_synchro.pdf',
+				'doublemini' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . '2014_comp_card_dm.pdf',
+				'tumbling'   => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . '2014_comp_card_tumbling.pdf',
+			),
 			'elite' => array(
 				'trampoline' => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_tr.pdf',
 				'synchro'    => storage_path() . DIRECTORY_SEPARATOR . 'compcards' . DIRECTORY_SEPARATOR . 'comp_elite_sy.pdf',

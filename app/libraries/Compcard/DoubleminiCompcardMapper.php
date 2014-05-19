@@ -13,20 +13,20 @@ class DoubleminiCompcardMapper extends CompcardMapper
 	{
 		for ($i = 1; $i <= 4; ++$i) {
 
-			$index = ($i == 1) ? '' : '_' . $i;
+			$index = ($i == 1) ? '' : '-' . $i;
 			
 			$this->eventFields['dmt_pass_' . $i] = array(
 				'mounter' => array(
 					'fig' => sprintf('MOUNTER-SKILL%s', $index),
-					'dd' => sprintf('DD-1%s', $index),
+					'dd' => sprintf('DD-1-SKILL%s', $index),
 				),
 				'spotter' => array(
 					'fig' => sprintf('SPOTTER-SKILL%s', $index),
-					'dd' => sprintf('DD-1%s', $index),
+					'dd' => sprintf('DD-1-SKILL%s', $index),
 				),
 				'dismount' => array(
 					'fig' => sprintf('DISMOUNT-SKILL%s', $index),
-					'dd'  => sprintf('DD-2%s', $index),
+					'dd'  => sprintf('DD-2-SKILL%s', $index),
 				),
 				'total' => sprintf('DDTOTAL%s', $index)
 			);

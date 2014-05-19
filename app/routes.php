@@ -115,7 +115,7 @@ Route::group(array('prefix' => 'api', 'namespace' => 'Api'), function() {
 
 	Route::get('routines/{routineId}/skills', 'RoutinesController@getSkills');
 
-	Route::get('compcard/download', 'CompcardController@getDownload');
+	Route::get('compcard', 'CompcardController@getDownload');
 });
 
 /*

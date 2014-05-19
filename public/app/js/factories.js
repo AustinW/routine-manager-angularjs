@@ -66,7 +66,7 @@ routineManagerFactories
         function(Restangular, LEVELS) {
             return {
                 findAll: function() {
-                    return Restangular.all('athletes').getList().$object;
+                    return Restangular.all('athletes').getList();
                 },
                 findOne: function(id) {
                     return Restangular.one('athletes', id).get();
@@ -96,15 +96,18 @@ routineManagerFactories
                     });
                 },
 
-                allTrampoline: function() {
-                    return Restangular.all('routines').getList({
-                        type: 'trampoline'
-                    });
-                },
-
                 findOne: function(id) {
                     return Restangular.one('routines', id).get();
                 }
             };
+        }
+    ])
+    .factory('CompcardService', ['Restangular',
+        function(Restangular) {
+            return {
+                all: function() {
+                    return Restangular.one('compcard').one('download');
+                }
+            }
         }
     ])
