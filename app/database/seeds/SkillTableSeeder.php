@@ -1162,34 +1162,36 @@ class SkillTableSeeder extends \Illuminate\Database\Seeder
 			]
 		];
 
-		Redis::hdel('skills:name', '*');
+		if (Redis::connection()) {
+			Redis::pipeline(function($redisPipe) {
+				$redisPipe->hdel('skills:name', '*');
 
-		$fields = array_keys($skills[0]);
+				$fields = array_keys($skills[0]);
 
-		array_map(function($skill) use($fields) {
+				foreach ($skills as $skill) {
+					$skillObj = new Skill;
 
-			$skillObj = new Skill;
+					foreach ($fields as $field) {
+						$skillObj->$field = $skill[$field];
+					}
 
-			// Import all of the fields
-			foreach ($fields as $field) {
-				$skillObj->$field = $skill[$field];
-			}
+					$skillObj->save();
 
-			$skillObj->save();
+					$slugName = $skill['name'];
+					$slugFig = $skill['fig'];
 
-            $slugName = $skill['name'];
-            $slugFig = $skill['fig'];
+					$redisPipe->hset('skills:name:' . $slugName, 'id', $skillObj->_id);
+					$redisPipe->hset('skills:name:' . $slugName, 'name', $skillObj->name);
+					$redisPipe->hset('skills:name:' . $slugName, 'trampoline_difficulty', $skillObj->trampoline_difficulty);
+					$redisPipe->hset('skills:name:' . $slugName, 'doublemini_difficulty', $skillObj->doublemini_difficulty);
+					$redisPipe->hset('skills:name:' . $slugName, 'tumbling_difficulty', $skillObj->tumbling_difficulty);
+					$redisPipe->hset('skills:name:' . $slugName, 'fig', $skillObj->fig);
+					$redisPipe->hset('skills:name:' . $slugName, 'flip_direction', $skillObj->flip_direction);
+					$redisPipe->hset('skills:name:' . $slugName, 'occurrence', $skillObj->occurrence);
 
-            Redis::hset('skills:name:' . $slugName, 'id', $skillObj->_id);
-            Redis::hset('skills:name:' . $slugName, 'name', $skillObj->name);
-            Redis::hset('skills:name:' . $slugName, 'trampoline_difficulty', $skillObj->trampoline_difficulty);
-            Redis::hset('skills:name:' . $slugName, 'doublemini_difficulty', $skillObj->doublemini_difficulty);
-            Redis::hset('skills:name:' . $slugName, 'tumbling_difficulty', $skillObj->tumbling_difficulty);
-            Redis::hset('skills:name:' . $slugName, 'fig', $skillObj->fig);
-            Redis::hset('skills:name:' . $slugName, 'flip_direction', $skillObj->flip_direction);
-            Redis::hset('skills:name:' . $slugName, 'occurrence', $skillObj->occurrence);
-
-            Redis::set('skills:fig:' . $slugFig, 1);
-		}, $skills);
+					$redisPipe->set('skills:fig:' . $slugFig, 1);
+				}
+			});
+		}
 	}
 }
