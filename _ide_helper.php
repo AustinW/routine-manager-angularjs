@@ -9117,7 +9117,7 @@ namespace {
 		 }
 
 	}
-	class Redis extends \Illuminate\Support\Facades\Redis{
+	class LRedis extends \Illuminate\Support\Facades\Redis{
 		/**
 		 * Create a new Redis connection instance.
 		 *
@@ -12736,6 +12736,118 @@ namespace {
 		 public static function getNames(){
 			//Method inherited from \Illuminate\View\Environment
 			return \Illuminate\View\Environment::getNames();
+		 }
+
+	}
+	class Pdfdf extends \Austinw\Pdfdf\PdfdfFacade{
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function __construct($fdfUtility, $fdfWriter){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::__construct($fdfUtility, $fdfWriter);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function getUtility(){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::getUtility();
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function registerFactory($factory){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::registerFactory($factory);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function registerFieldHandler($fieldHanlder){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::registerFieldHandler($fieldHanlder);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function setPdftkDumpParser($pdftkDumpParser){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::setPdftkDumpParser($pdftkDumpParser);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function setConfiguration($config){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::setConfiguration($config);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function extractFields($inputPdf){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::extractFields($inputPdf);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function generate($inputPdf, $outputPdf, $fields){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::generate($inputPdf, $outputPdf, $fields);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function setFileName($outputPdf){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::setFileName($outputPdf);
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function getFileName(){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::getFileName();
+		 }
+
+		/**
+		 * 
+		 *
+		 * @static 
+		 */
+		 public static function fill($inputPdf, $outputPdf){
+			//Method inherited from \Austinw\Pdfdf\Pdfdf
+			 \Austinw\Pdfdf\Pdfdf::fill($inputPdf, $outputPdf);
 		 }
 
 	}
