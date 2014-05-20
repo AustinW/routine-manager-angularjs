@@ -1163,6 +1163,7 @@ class SkillTableSeeder extends \Illuminate\Database\Seeder
 		];
 
 		if (LRedis::connection()) {
+			
 			LRedis::pipeline(function($redisPipe) use($skills) {
 				$redisPipe->hdel('skills:name', '*');
 
