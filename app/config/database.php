@@ -48,15 +48,14 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => isset($_SERVER['DB1_HOST']) ? $_SERVER['DB1_HOST'] : '',
-			'database'  => isset($_SERVER['DB1_NAME']) ? $_SERVER['DB1_NAME'] : '',
-			'username'  => isset($_SERVER['DB1_USER']) ? $_SERVER['DB1_USER'] : '',
-			'password'  => isset($_SERVER['DB1_PASS']) ? $_SERVER['DB1_PASS'] : '',
+			'host'      => getenv('DB1_HOST'),
+			'database'  => getenv('DB1_NAME'),
+			'username'  => getenv('DB1_USER'),
+			'password'  => getenv('DB1_PASS'),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
-
 	),
 
 	/*
@@ -85,10 +84,10 @@ return array(
 
 	'redis' => array(
 
-		'cluster' => true,
+		'cluster' => false,
 
 		'default' => array(
-			'host'     => '127.0.0.1',
+			'host'     => 'tunnel.pagodabox.com',
 			'port'     => 6379,
 			'database' => 0,
 		),

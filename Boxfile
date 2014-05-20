@@ -3,7 +3,6 @@ global:
     - LARAVEL_ENV: production
     - ENV: production
 web1:
-  name: app
   document_root: public
   php_version: 5.4.14
   php_extensions:
@@ -30,8 +29,8 @@ web1:
     - "php artisan migrate"
     - "php artisan db:seed"
   after_deploy:
-    - "rm -f app/storage/cache/*"
-    - "rm -f /app/storage/views/*"
+    - "php artisan cache:clear"
+    - "rm -f app/storage/views/*"
 cache1:
   type: redis
 db1:
