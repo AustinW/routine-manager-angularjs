@@ -1,4 +1,10 @@
-document_root: public
+global:
+  env:
+    - LARAVEL_ENV: production
+    - ENV: production
+web1:
+  name: app
+  document_root: public
   php_version: 5.4.14
   php_extensions:
     - mbstring
@@ -15,12 +21,18 @@ document_root: public
     - app/storage/meta
     - app/storage/sessions
     - app/storage/views
+    - app/storage/pdf
+    - app/public/compcards
   after_build:
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-source"
-  after_deploy:
-    - "php artisan cache:clear"
-    - "rm -f app/storage/views/*"
   before_deploy:
     - "php artisan migrate"
+    - "php artisan db:seed"
+  after_deploy:
+    - "rm -f app/storage/cache/*"
+    - "rm -f /app/storage/views/*"
 cache1:
   type: redis
+db1:
+  name: routine_manager
+  type: mysql
