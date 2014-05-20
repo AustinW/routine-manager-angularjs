@@ -6,7 +6,3 @@ composer.lock
 .idea/*
 /node_modules
 /public/vendor
-/public/assets/fonts
-/public/assets/js
-/public/assets/script.min.js
-/public/assets/style.min.css
