@@ -18,7 +18,7 @@ class Skill extends BaseModel
     {
         if (empty($skill)) return false;
 
-        // !! TODO: Until pagoda's redis works, removing redis dependency
+        // !!! TODO: Until pagoda's redis works, removing redis dependency
         
         // First let's check if the skill exists as a written name in Redis for fast lookup
         if (false && LRedis::hget(self::REDIS_SKILL_NAME . self::massageNameString($skill), '_id') !== null) {
