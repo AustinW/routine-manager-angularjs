@@ -192,7 +192,7 @@ return array(
 		'AuthTokenNotAuthorizedException' => 'Tappleby\AuthToken\Exceptions\NotAuthorizedException',
 
 		/*** Additional Aliases ***/
-		'Entrust'         => 'Zizaco\Entrust\EntrustFacade', // Entrust Alias
+		'Entrust' => 'Zizaco\Entrust\EntrustFacade', // Entrust Alias
 	),
 
 	'compcards' => array(
