@@ -186,7 +186,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
-		'Pdfdf'           => 'Austinw\Pdfdf\PdfdfFacace',
+		'Pdfdf'           => 'Austinw\Pdfdf\PdfdfFacade',
 
 		'AuthToken'                       => 'Tappleby\Support\Facades\AuthToken',
 		'AuthTokenNotAuthorizedException' => 'Tappleby\AuthToken\Exceptions\NotAuthorizedException',
