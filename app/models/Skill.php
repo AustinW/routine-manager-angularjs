@@ -18,12 +18,14 @@ class Skill extends BaseModel
     {
         if (empty($skill)) return false;
 
+        // !! TODO: Until pagoda's redis works, removing redis dependency
+        
         // First let's check if the skill exists as a written name in Redis for fast lookup
-        if (LRedis::hget(self::REDIS_SKILL_NAME . self::massageNameString($skill), '_id') !== null) {
+        if (false && LRedis::hget(self::REDIS_SKILL_NAME . self::massageNameString($skill), '_id') !== null) {
             return true;
         
         // If it doesn't exist, check to see if the skill was an FIG shorthand instead of a name
-        } else if (LRedis::get(self::REDIS_SKILL_FIG . self::massageFigString($skill)) !== null) {
+        } else if (false && LRedis::get(self::REDIS_SKILL_FIG . self::massageFigString($skill)) !== null) {
             return true;
         
         // If it still isn't found, check the Mongo database
