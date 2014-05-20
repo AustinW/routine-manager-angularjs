@@ -6,3 +6,6 @@ composer.lock
 .idea/*
 /node_modules
 /public/vendor
+app/storage/tmp/*
+app/storage/fdf/*
+public/compcards/*

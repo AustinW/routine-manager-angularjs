@@ -20,6 +20,7 @@ web1:
     - app/storage/meta
     - app/storage/sessions
     - app/storage/views
+    - app/storage/tmp
     - app/storage/pdf
     - app/public/compcards
   after_build:
