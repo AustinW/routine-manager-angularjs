@@ -27,7 +27,7 @@ web1:
     - "php artisan dump-autoload"
   before_deploy:
     - "php artisan migrate"
-    - "php artisan db:seed"
+    # - "php artisan db:seed" # No longer need to seed
   after_deploy:
     - "php artisan cache:clear"
     - "rm -f app/storage/views/*"
