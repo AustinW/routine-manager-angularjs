@@ -1162,8 +1162,8 @@ class SkillTableSeeder extends \Illuminate\Database\Seeder
 			]
 		];
 
-		if (Redis::connection()) {
-			Redis::pipeline(function($redisPipe) {
+		if (LRedis::connection()) {
+			LRedis::pipeline(function($redisPipe) {
 				$redisPipe->hdel('skills:name', '*');
 
 				$fields = array_keys($skills[0]);
