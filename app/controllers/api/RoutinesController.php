@@ -73,26 +73,23 @@ class RoutinesController extends BaseController
      */
     public function store()
     {
-        $input = Input::json()->get('routine');
-
-        $validation = Validator::make($input, array('skills' => 'required'));
+        $validation = Validator::make(Input::all(), [
+            'skills' => 'required',
+            'type'   => 'required'
+        ]);
 
         if ($validation->fails()) {
             return Response::apiValidationError($validation, Input::all());
         }
 
-        $invalidSkills = Skill::checkForErrors(array_get($input, 'skills'));
+        $invalidSkills = Skill::checkForErrors(Input::get('skills'));
 
         if (count($invalidSkills) > 0) {
-            return Response::apiError(Lang::get('routine.invalid_skills', array('skills', implode(',', $invalidSkills))));
+            return Response::apiError(Lang::get('routine.invalid_skills', ['skills' => implode(',', $invalidSkills)]));
         }
 
         // Initiate a routine model based on which type they selected
-        $routine = $this->routineRepository->fill([
-            'name'        => array_get($input, 'name'),
-            'description' => array_get($input, 'description'),
-            'type'        => array_get($input, 'type')
-        ]);
+        $routine = $this->routineRepository->fill(Input::only(['name', 'description', 'type']));
 
         // Ensure the model is valid
         if ($routine->isInvalid()) {
@@ -102,17 +99,7 @@ class RoutinesController extends BaseController
         // Save the routine and associate it to the active user
         $this->user->routines()->save($routine);
 
-        // If an optional athlete was specified, create the association here
-        if (Input::get('athlete_id') and ( $athlete = $this->athleteRepository->findCheckOwner(Input::get('athlete_id'))->first() )) {
-
-            // $athleteRoutine = $this->athleteRoutineModel;
-            // $athleteRoutine->athlete_id = $athlete->id;
-
-            // $routine->athleteRoutines()->save($athleteRoutine);
-
-        }
-
-        $skillsCollection = $routine->attachSkills(array_get($input, 'skills'));
+        $skillsCollection = $routine->attachSkills(Input::get('skills'));
 
         $routinesArray = $routine->toArray();
         $routinesArray['skills'] = $skillsCollection->toArray();

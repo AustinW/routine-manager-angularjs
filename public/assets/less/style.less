@@ -8,23 +8,6 @@
     border: 1px solid #ccc;
 }
 
-#output{
-    position: absolute;
-    width: 300px;
-    top: -75px;
-    left: 0;
-    color: #fff;
-}
-
-#output.alert-success{
-    background: rgb(25, 204, 25);
-}
-
-#output.alert-danger{
-    background: rgb(228, 105, 105);
-}
-
-
 .login-container::before,.login-container::after{
     content: "";
     position: absolute;
@@ -46,6 +29,22 @@
      -moz-transform: rotateZ(-2deg);
       -ms-transform: rotateZ(-2deg);
 
+}
+
+#output{
+    position: absolute;
+    width: 300px;
+    top: -75px;
+    left: 0;
+    color: #fff;
+}
+
+#output.alert-success{
+    background: rgb(25, 204, 25);
+}
+
+#output.alert-danger{
+    background: rgb(228, 105, 105);
 }
 
 .avatar{
@@ -94,8 +93,24 @@
   animation-fill-mode: both;
 }
 
+input[type=text] .ng-invalid {
+    border:1px solid red;
+}
+
+.status-valid {
+    color: #00a315;
+}
+
+.status-invalid {
+    color: #a30005;
+}
+
 .error {
   color: #a30000;
+}
+
+.event-panel {
+    display:inline-block;
 }
 
 @-webkit-keyframes fadeInUp {

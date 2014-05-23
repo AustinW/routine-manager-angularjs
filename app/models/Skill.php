@@ -33,7 +33,8 @@ class Skill extends BaseModel
 
             // Search with more flexibility (like '>' for pike, without position for single flips)
             // TODO: Add more fuzzy searching
-            return self::where('name', 'like', self::massageNameString($skill))
+            return self::where('id', $skill)
+                ->orWhere('name', 'like', self::massageNameString($skill))
                 ->orWhere('fig', '=', self::massageFigString($skill))
                 ->count() > 0;
         }
@@ -41,7 +42,9 @@ class Skill extends BaseModel
 
     public static function checkForErrors(array $skills)
     {
-        return array_filter($skills, function($skill) { return self::invalidSkill($skill); });
+        return array_filter($skills, function($skill) {
+            return self::invalidSkill($skill);
+        });
     }
 
     public static function invalidSkill($skill)
@@ -49,11 +52,15 @@ class Skill extends BaseModel
         return ! self::validSkill($skill);
     }
 
-    public static function search($skill)
+    public function search($skill, $limit = 15)
     {
-        return static::where('name', self::massageNameString($skill))
-            ->orWhere('fig', self::massageFigString($skill))
-            ->first();
+
+        return $this->where('name', 'LIKE', self::massageNameString($skill) . '%')
+            ->orWhere('fig', 'LIKE', $skill . '%')
+            ->orderBy('occurrence', 'asc')
+            ->take($limit)
+            ->remember(5)
+            ->get();
     }
 
     public function getTrampolineDifficultyAttribute($value) { return $this->formatDifficulty($value); }

@@ -57,7 +57,10 @@
 
       <div class="row">
         <div class="col-lg-3">
-          <h4 class="trampoline" style="display:inline-block">Trampoline</h4> <a href="#" ng-click="chooseTrampoline()" class="btn btn-xs btn-info">Choose</a>
+          <h4 class="event-panel">Trampoline</h4>
+          <a href="#" ng-click="chooseTrampoline()" class="btn btn-xs btn-info" ng-disabled=" ! athlete.trampoline_level">
+            <i class="fa fa-cog"></i> Choose
+          </a>
 
           <dl>
             <dt>Prelim Compulsory:</dt>
@@ -99,7 +102,10 @@
           </dl>
         </div>
         <div class="col-lg-3">
-          <h4 class="synchro">Synchro</h4>  <a href="#" ng-click="chooseSynchro()" class="btn btn-xs btn-info">Choose</a>
+          <h4 class="event-panel">Synchro</h4>
+          <a href="#" ng-click="chooseSynchro()" class="btn btn-xs btn-info" ng-disabled=" ! athlete.synchro_level">
+            <i class="fa fa-cog"></i> Choose
+          </a>
           
           <dl>
             <dt>Prelim Compulsory:</dt>
@@ -132,7 +138,10 @@
           </dl>
         </div>
         <div class="col-lg-3">
-          <h4 class="double-mini">Double Mini</h4> <a href="#" ng-click="chooseDoubleMini()" class="btn btn-xs btn-info">Choose</a>
+          <h4 class="event-panel">Double Mini</h4>
+          <a href="#" ng-click="chooseDoubleMini()" class="btn btn-xs btn-info" ng-disabled=" ! athlete.doublemini_level">
+            <i class="fa fa-cog"></i> Choose
+          </a>
 
           <dl>
             <dt>Pass 1:</dt>
@@ -174,7 +183,10 @@
           </dl>
         </div>
         <div class="col-lg-3">
-          <h4 class="tumbling">Tumbling</h4> <a href="#" ng-click="chooseTumbling()" class="btn btn-xs btn-info">Choose</a>
+          <h4 class="event-panel">Tumbling</h4>
+          <a href="#" ng-click="chooseTumbling()" class="btn btn-xs btn-info" ng-disabled=" ! athlete.tumbling_level">
+            <i class="fa fa-cog"></i> Choose
+          </a>
           
           <dl>
             <dt>Pass 1:</dt>

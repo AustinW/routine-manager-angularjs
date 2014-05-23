@@ -2,10 +2,10 @@
 
 use \App;
 use \SkillAnalysis;
+use \Skill;
 
 class Routine extends \BaseModel
 {
-
 	protected $softDelete = true;
 
 	protected $fillable = ['name', 'description', 'type'];
@@ -39,6 +39,19 @@ class Routine extends \BaseModel
         'name'   => 'required',
     );
 
+	/**
+	 * Skill model dependency
+	 * @var Skill
+	 */
+    protected $skillRepository;
+
+    public function __construct()
+    {
+    	parent::__construct();
+
+    	$this->skillRepository = App::make('skill');
+    }
+
 	/*
 	|--------------------------------------------------------------------------
 	| Relationships
@@ -71,15 +84,15 @@ class Routine extends \BaseModel
 			return null;
 	}
 
-	public function attachSkills(array $skills)
+	public function attachSkills(array $skillIds)
 	{
 		$skillsCollection = new Illuminate\Database\Eloquent\Collection();
 
         $order = 1;
-        foreach ($skills as $skill) {
-            $skill = Skill::search($skill);
+        foreach ($skillIds as $skillId) {
+            $skill = $this->skillRepository->find($skillId);
 
-            $this->skills()->attach($skill, array('order_index' => $order++ ));
+            $this->skills()->attach($skill->id, array('order_index' => $order++ ));
 
             $skillsCollection->add($skill);
         }

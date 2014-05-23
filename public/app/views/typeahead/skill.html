@@ -1,0 +1,7 @@
+<a>
+    <div class="row">
+    	<div class="pull-left" bind-html-unsafe="match.model.fig | typeaheadHighlight:query">{{ match.model.fig }}</div>
+    	<div class="pull-right">DD: {{ $parent.$parent.$parent.difficulty(match.model) }}</div>
+    </div>
+    <div class="row" bind-html-unsafe="match.model.name | typeaheadHighlight:query"></div>
+</a>

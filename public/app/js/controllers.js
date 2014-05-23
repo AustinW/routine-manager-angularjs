@@ -221,7 +221,22 @@ routineManagerControllers
     .controller('RoutineNewCtrl', ['$scope', '$modal', 'Restangular',
         function($scope, $modal, Restangular) {
             $scope.openTrampoline = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: '/app/views/modals/routine/trampoline.html',
+                    controller: 'RoutineNewInstanceCtrl',
+                    resolve: {
+                        event: function() {
+                            return {
+                                key: 'trampoline',
+                                title: 'Trampoline'
+                            };
+                        }
+                    }
+                });
 
+                modalInstance.result.then(function(trampolineRoutine) {
+
+                });
             };
 
             $scope.openDoubleMini = function() {
@@ -230,6 +245,81 @@ routineManagerControllers
 
             $scope.openTumbling = function() {
 
+            };
+        }
+    ])
+    .controller('RoutineNewInstanceCtrl', ['$scope', '$location', '$modalInstance', 'event', 'Restangular',
+        function($scope, $location, $modalInstance, event, Restangular) {
+            $scope.title = 'New ' + event.title + ' Routine';
+
+            $scope.event = event.key;
+            $scope.routine = {};
+
+            $scope.form = {
+                skills: [],
+                loading: [],
+                valid: []
+            };
+
+            $scope.skillModels = [];
+
+            for (var i = 0; i < 10; ++i) {
+                $scope.form.skills[i] = {};
+                $scope.form.loading[i] = false;
+            }
+
+            $scope.allSkillsValid = function() {
+                if ($scope.skillModels.length != 10)
+                    return false;
+
+                return 10 == _.filter($scope.skillModels, function(skillModel) {
+                    return !!skillModel;
+                }).length;
+            };
+
+            $scope.difficulty = function(skill) {
+                return skill.trampoline_difficulty;
+            };
+
+            $scope.skillSelected = function($item, $model, $index) {
+                $scope.form.valid[$index] = true;
+                console.log($scope.form.skills);
+                $scope.skillModels[$index] = $item;
+            };
+
+            $scope.searchSkills = function(query, index) {
+                $scope.form.loading[index] = true;
+
+                return Restangular.all('skills').one('search').get({
+                    query: query
+                }).then(function(response) {
+                    $scope.form.loading[index] = false;
+
+                    return response;
+                });
+            };
+
+            $scope.save = function(isValid) {
+                if (isValid) {
+
+                    Restangular.all('routines').post({
+                        name: $scope.routine.name,
+                        description: $scope.routine.description,
+                        type: 'trampoline',
+                        skills: _.map($scope.skillModels, function(skillModel) {
+                            return skillModel.id;
+                        })
+                    }).then(function(response) {
+                        delete $scope.error;
+                        $modalInstance.close(response);
+
+                        console.log('response', response);
+                        $location.path('/routines/' + response.id);
+                    });
+                } else {
+                    alert('form is invalid');
+                    console.log(isValid);
+                }
             };
         }
     ])
@@ -286,7 +376,7 @@ routineManagerControllers
                     $scope.chosenRoutines[routine.pivot.routine_type] = routine.id;
             });
 
-            $scope.title = 'Choose ' + theEvent.title + ' Routines';
+            $scope.title = $scope.athlete.first_name + '\'s ' + theEvent.title + ' Routines';
 
             $scope.showRoutine = function(routineId) {
                 $scope.activeRoutine = $filter('getById')($scope.routines, routineId);
