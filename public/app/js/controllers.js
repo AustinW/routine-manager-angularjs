@@ -226,9 +226,34 @@ routineManagerControllers
                     controller: 'RoutineNewInstanceCtrl',
                     resolve: {
                         event: function() {
+                            var emptySkillObjects = [],
+                                loadingStatuses = [],
+                                skillCount = 10;
+
+                            for (var i = 0; i < skillCount; ++i) {
+                                emptySkillObjects[i] = {};
+                                loadingStatuses[i] = false;
+                            }
+
                             return {
                                 key: 'trampoline',
-                                title: 'Trampoline'
+                                title: 'New Trampoline Routine',
+                                emptySkillObjects: emptySkillObjects,
+                                loadingStatuses: loadingStatuses,
+                                skillCount: skillCount,
+                                setOrder: function(skillModels) {
+                                    return null;
+                                },
+                                skillValidator: function(skillModels) {
+                                    return function() {
+                                        if (skillModels.length < skillCount)
+                                            return false;
+
+                                        return skillCount == _.filter(skillModels, function(skillModel) {
+                                            return !!skillModel;
+                                        }).length;
+                                    };
+                                }
                             };
                         }
                     }
@@ -240,7 +265,45 @@ routineManagerControllers
             };
 
             $scope.openDoubleMini = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: '/app/views/modals/routine/doublemini.html',
+                    controller: 'RoutineNewInstanceCtrl',
+                    resolve: {
+                        event: function() {
+                            var emptySkillObjects = {
+                                0: null,
+                                1: null,
+                                2: null
+                            },
+                                loadingStatuses = [],
+                                skillCount = 2;
 
+                            for (var i = 0; i < skillCount; ++i) {
+                                loadingStatuses[i] = false;
+                            }
+
+                            return {
+                                key: 'doublemini',
+                                title: 'New Double Mini Pass',
+                                emptySkillObjects: emptySkillObjects,
+                                loadingStatuses: loadingStatuses,
+                                skillCount: skillCount,
+                                setOrder: function(skillModels) {
+                                    console.log(skillModels);
+                                    return 'asdf';
+                                },
+                                skillValidator: function(skillModels) {
+                                    return function() {
+                                        if (skillModels.length < 2)
+                                            return false;
+
+                                        return ( !! skillModels[0] || !! skillModels[1]) && !! skillModels[2];
+                                    };
+                                }
+                            };
+                        }
+                    }
+                })
             };
 
             $scope.openTumbling = function() {
@@ -248,12 +311,13 @@ routineManagerControllers
             };
         }
     ])
-    .controller('RoutineNewInstanceCtrl', ['$scope', '$location', '$modalInstance', 'event', 'Restangular',
-        function($scope, $location, $modalInstance, event, Restangular) {
-            $scope.title = 'New ' + event.title + ' Routine';
+    .controller('RoutineNewInstanceCtrl', ['$scope', '$location', '$modalInstance', 'Restangular', 'event',
+        function($scope, $location, $modalInstance, Restangular, event) {
+            $scope.title = event.title;
 
             $scope.event = event.key;
             $scope.routine = {};
+            $scope.skill = [];
 
             $scope.form = {
                 skills: [],
@@ -263,27 +327,22 @@ routineManagerControllers
 
             $scope.skillModels = [];
 
-            for (var i = 0; i < 10; ++i) {
-                $scope.form.skills[i] = {};
-                $scope.form.loading[i] = false;
-            }
+            $scope.form.skills = event.emptySkillObjects;
+            $scope.form.loading = event.loadingStatuses;
 
-            $scope.allSkillsValid = function() {
-                if ($scope.skillModels.length != 10)
-                    return false;
-
-                return 10 == _.filter($scope.skillModels, function(skillModel) {
-                    return !!skillModel;
-                }).length;
-            };
+            $scope.allSkillsValid = event.skillValidator($scope.skillModels);
 
             $scope.difficulty = function(skill) {
-                return skill.trampoline_difficulty;
+                return skill[event.key + '_difficulty'];
+            };
+
+            $scope.checkValid = function(index) {
+                $scope.form.valid[index] = false;
+                $scope.skillModels[index] = null;
             };
 
             $scope.skillSelected = function($item, $model, $index) {
                 $scope.form.valid[$index] = true;
-                console.log($scope.form.skills);
                 $scope.skillModels[$index] = $item;
             };
 
@@ -300,15 +359,18 @@ routineManagerControllers
             };
 
             $scope.save = function(isValid) {
+                console.log(event.setOrder($scope.skillModels));
+                return;
                 if (isValid) {
 
                     Restangular.all('routines').post({
                         name: $scope.routine.name,
                         description: $scope.routine.description,
-                        type: 'trampoline',
+                        type: event.key,
                         skills: _.map($scope.skillModels, function(skillModel) {
                             return skillModel.id;
-                        })
+                        }),
+                        order: event.setOrder($scope.skillModels)
                     }).then(function(response) {
                         delete $scope.error;
                         $modalInstance.close(response);

@@ -78,6 +78,13 @@ class RoutinesController extends BaseController
             'type'   => 'required'
         ]);
 
+        // Require an 'order' field only when the type is doublemini
+        // Ex: order[0] = 0, order[1] = 2 indicates a mounter/dismount pass
+        // Ex: order[0] = 1, order[1] = 2 indicates a spotter/dismount pass
+        $validation->sometimes('order', 'required|array', function($input) {
+            return $input->type == 'doublemini';
+        });
+
         if ($validation->fails()) {
             return Response::apiValidationError($validation, Input::all());
         }
