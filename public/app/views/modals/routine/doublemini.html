@@ -1,92 +1,96 @@
 <form class="form-horizontal" role="form" name="routineForm" ng-submit="save(routineForm.$valid && allSkillsValid())" novalidate>
     <div class="modal-header">
-        <h3>{{ title }}</h3>
+        <h3>{{ routine.name || title }}</h3>
     </div>
     <div class="modal-body">
         
         <div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
         
         <div class="form-group" ng-class="{'has-error' : routineForm.name.$invalid && !routineForm.name.$pristine }">
-            <label for="name" class="col-sm-4 control-label">Routine name</label>
+            <label for="name" class="col-sm-4 control-label">
+                <i ng-show="routine.name" class="fa fa-check-circle-o status-valid"></i>
+                <i ng-show=" ! routine.name" class="fa fa-times-circle-o status-invalid"></i>
+                <span>Pass name</span>
+            </label>
             <div class="col-sm-8">
-                <input type="text" id="name" name="name" class="form-control" ng-model="routine.name" required>
+                <input type="text" id="name" name="name" class="form-control" ng-model="routine.name" placeholder="Name this pass..." required>
                 
-                <p ng-show="routineForm.name.$invalid && !routineForm.name.$pristine" class="help-block">Routine name is required.</p>
+                <p ng-show="routineForm.name.$invalid && !routineForm.name.$pristine" class="help-block">Pass name is required.</p>
             </div>
         </div>
         
-        <div ng-show=" ! skill[1]" class="form-group" ng-class="{'has-error' : routineForm.formSkill[0].$invalid && !routineForm.formSkill[0].$pristine }">
+        <div ng-show=" ! skill['spotter']" class="form-group" ng-class="{'has-error' : routineForm.formSkill['mounter'].$invalid && !routineForm.formSkill['mounter'].$pristine }">
             
             <!-- Mounter -->
             <label class="col-sm-4 control-label">
-                <i ng-show="form.loading[0]" class="fa fa-spinner fa-spin"></i>
-                <i ng-show="skillModels[0].id" class="fa fa-check-circle-o status-valid"></i>
-                <i ng-show="! skillModels[0].id && !! skill[0]" class="fa fa-times-circle-o status-invalid"></i>
+                <i ng-show="form.loading['mounter']" class="fa fa-spinner fa-spin"></i>
+                <i ng-show="form.valid['mounter']" class="fa fa-check-circle-o status-valid"></i>
+                <i ng-show=" ! form.valid['mounter']" class="fa fa-times-circle-o status-invalid"></i>
                 <span>Mounter</span>
             </label>
 
             <div class="col-sm-8">
                 <input
                     type="text"
-                    name="formSkill[0]"
-                    ng-change="checkValid($index)"
-                    ng-model="skill[0]"
-                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 0)"
-                    typeahead-loading="form.loading[0]"
+                    name="formSkill['mounter']"
+                    ng-change="checkValid('mounter')"
+                    ng-model="skill['mounter']"
+                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 'mounter')"
+                    typeahead-loading="form.loading['mounter']"
                     typeahead-template-url="/app/views/typeahead/skill.html"
-                    typeahead-on-select="skillSelected($item, $model, 0)"
+                    typeahead-on-select="skillSelected($item, $model, 'mounter')"
                     placeholder="FIG code or skill name..."
                     class="form-control"
                 >
             </div>
         
         </div>
-        <div ng-show=" ! skill[0]" class="form-group" ng-class="{'has-error' : routineForm.formSkill[1].$invalid && !routineForm.formSkill[1].$pristine }">
+        <div ng-show=" ! skill['mounter']" class="form-group" ng-class="{'has-error' : routineForm.formSkill['spotter'].$invalid && !routineForm.formSkill['spotter'].$pristine }">
             
             <!-- Spotter -->
             <label class="col-sm-4 control-label">
-                <i ng-show="form.loading[1]" class="fa fa-spinner fa-spin"></i>
-                <i ng-show="skillModels[1].id" class="fa fa-check-circle-o status-valid"></i>
-                <i ng-show="! skillModels[1].id && !! skill[1]" class="fa fa-times-circle-o status-invalid"></i>
+                <i ng-show="form.loading['spotter']" class="fa fa-spinner fa-spin"></i>
+                <i ng-show="form.valid['spotter']" class="fa fa-check-circle-o status-valid"></i>
+                <i ng-show=" ! form.valid['spotter']" class="fa fa-times-circle-o status-invalid"></i>
                 <span>Spotter</span>
             </label>
 
             <div class="col-sm-8">
                 <input
                     type="text"
-                    name="formSkill[1]"
-                    ng-change="form.valid[1] = false"
-                    ng-model="skill[1]"
-                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 1)"
-                    typeahead-loading="form.loading[1]"
+                    name="formSkill['spotter']"
+                    ng-change="checkValid('spotter')"
+                    ng-model="skill['spotter']"
+                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 'spotter')"
+                    typeahead-loading="form.loading['spotter']"
                     typeahead-template-url="/app/views/typeahead/skill.html"
-                    typeahead-on-select="skillSelected($item, $model, 1)"
+                    typeahead-on-select="skillSelected($item, $model, 'spotter')"
                     placeholder="FIG code or skill name..."
                     class="form-control"
                 >
             </div>
 
         </div>
-        <div class="form-group" ng-class="{'has-error' : routineForm.formSkill[0].$invalid && !routineForm.formSkill[0].$pristine }">
+        <div class="form-group" ng-class="{'has-error' : routineForm.formSkill['dismount'].$invalid && !routineForm.formSkill['dismount'].$pristine }">
 
             <!-- Dismount -->
             <label class="col-sm-4 control-label">
-                <i ng-show="form.loading[2]" class="fa fa-spinner fa-spin"></i>
-                <i ng-show="skillModels[2].id" class="fa fa-check-circle-o status-valid"></i>
-                <i ng-show="! skillModels[2].id && !! skill[2]" class="fa fa-times-circle-o status-invalid"></i>
+                <i ng-show="form.loading['dismount']" class="fa fa-spinner fa-spin"></i>
+                <i ng-show="form.valid['dismount']" class="fa fa-check-circle-o status-valid"></i>
+                <i ng-show=" ! form.valid['dismount']" class="fa fa-times-circle-o status-invalid"></i>
                 <span>Dismount</span>
             </label>
 
             <div class="col-sm-8">
                 <input
                     type="text"
-                    name="formSkill[2]"
-                    ng-change="form.valid[2] = false"
-                    ng-model="skill[2]"
-                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 2)"
-                    typeahead-loading="form.loading[2]"
+                    name="formSkill['dismount']"
+                    ng-change="checkValid('dismount')"
+                    ng-model="skill['dismount']"
+                    typeahead="possibleSkills.fig as possibleSkill for possibleSkills in searchSkills($viewValue, 'dismount')"
+                    typeahead-loading="form.loading['dismount']"
                     typeahead-template-url="/app/views/typeahead/skill.html"
-                    typeahead-on-select="skillSelected($item, $model, 2)"
+                    typeahead-on-select="skillSelected($item, $model, 'dismount')"
                     placeholder="FIG code or skill name..."
                     class="form-control"
                 >

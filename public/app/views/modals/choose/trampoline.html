@@ -25,7 +25,7 @@
                         id         = "tra_prelim_compulsory"
                         name       = "tra_prelim_compulsory"
                         ng-model   = "chosenRoutines.tra_prelim_compulsory"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
                         ng-focus   = "showRoutine(chosenRoutines.tra_prelim_compulsory)"
                     ></select>
@@ -38,7 +38,7 @@
                         id         = "tra_prelim_optional"
                         name       = "tra_prelim_optional"
                         ng-model   = "chosenRoutines.tra_prelim_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.tra_prelim_optional)"
                         ng-focus   = "showRoutine(chosenRoutines.tra_prelim_optional)"
                     ></select>
@@ -51,7 +51,7 @@
                         id         = "tra_semi_final_optional"
                         name       = "tra_semi_final_optional"
                         ng-model   = "chosenRoutines.tra_semi_final_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.tra_semi_final_optional)"
                         ng-focus   = "showRoutine(chosenRoutines.tra_semi_final_optional)"
                     ></select>
@@ -64,7 +64,7 @@
                         id         = "tra_final_optional"
                         name       = "tra_final_optional"
                         ng-model   = "chosenRoutines.tra_final_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.tra_final_optional)"
                         ng-focus   = "showRoutine(chosenRoutines.tra_final_optional)"
                     ></select>

@@ -106,7 +106,7 @@ class RoutinesController extends BaseController
         // Save the routine and associate it to the active user
         $this->user->routines()->save($routine);
 
-        $skillsCollection = $routine->attachSkills(Input::get('skills'));
+        $skillsCollection = $routine->attachSkills(Input::get('skills'), Input::get('order'));
 
         $routinesArray = $routine->toArray();
         $routinesArray['skills'] = $skillsCollection->toArray();

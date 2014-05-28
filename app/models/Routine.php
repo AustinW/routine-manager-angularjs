@@ -84,17 +84,23 @@ class Routine extends \BaseModel
 			return null;
 	}
 
-	public function attachSkills(array $skillIds)
+	public function attachSkills(array $skillIds, $order = array())
 	{
 		$skillsCollection = new Illuminate\Database\Eloquent\Collection();
 
-        $order = 1;
+		if (empty($order)) {
+			$order = range(0, count($skillIds));
+		}
+
+        $index = 0;
         foreach ($skillIds as $skillId) {
             $skill = $this->skillRepository->find($skillId);
 
-            $this->skills()->attach($skill->id, array('order_index' => $order++ ));
+            $this->skills()->attach($skill->id, array('order_index' => $order[$index] ));
 
             $skillsCollection->add($skill);
+
+            ++$index;
         }
 
         return $skillsCollection;

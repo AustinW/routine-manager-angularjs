@@ -25,7 +25,7 @@
                         id         = "dmt_pass_1"
                         name       = "dmt_pass_1"
                         ng-model   = "chosenRoutines.dmt_pass_1"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.dmt_pass_1)"
                         ng-focus   = "showRoutine(chosenRoutines.dmt_pass_1)"
                     ></select>
@@ -37,7 +37,7 @@
                         id         = "dmt_pass_2"
                         name       = "dmt_pass_2"
                         ng-model   = "chosenRoutines.dmt_pass_2"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.dmt_pass_2)"
                         ng-focus   = "showRoutine(chosenRoutines.dmt_pass_2)"
                     ></select>
@@ -50,7 +50,7 @@
                         id         = "dmt_pass_3"
                         name       = "dmt_pass_3"
                         ng-model   = "chosenRoutines.dmt_pass_3"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.dmt_pass_3)"
                         ng-focus   = "showRoutine(chosenRoutines.dmt_pass_3)"
                     ></select>
@@ -62,7 +62,7 @@
                         id         = "dmt_pass_4"
                         name       = "dmt_pass_4"
                         ng-model   = "chosenRoutines.dmt_pass_4"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.dmt_pass_4)"
                         ng-focus   = "showRoutine(chosenRoutines.dmt_pass_4)"
                     ></select>

@@ -241,6 +241,7 @@ routineManagerControllers
                                 emptySkillObjects: emptySkillObjects,
                                 loadingStatuses: loadingStatuses,
                                 skillCount: skillCount,
+                                models: [],
                                 setOrder: function(skillModels) {
                                     return null;
                                 },
@@ -288,16 +289,29 @@ routineManagerControllers
                                 emptySkillObjects: emptySkillObjects,
                                 loadingStatuses: loadingStatuses,
                                 skillCount: skillCount,
+                                models: {
+                                    mounter: null,
+                                    spotter: null,
+                                    dismount: null
+                                },
                                 setOrder: function(skillModels) {
-                                    console.log(skillModels);
-                                    return 'asdf';
+                                    var order = [];
+
+                                    if (skillModels.mounter)
+                                        order.push(0);
+                                    else
+                                        order.push(1);
+
+                                    order.push(2);
+
+                                    return order;
                                 },
                                 skillValidator: function(skillModels) {
                                     return function() {
                                         if (skillModels.length < 2)
                                             return false;
 
-                                        return ( !! skillModels[0] || !! skillModels[1]) && !! skillModels[2];
+                                        return ( !! skillModels.mounter || !! skillModels.spotter) && !! skillModels.dismount;
                                     };
                                 }
                             };
@@ -325,7 +339,7 @@ routineManagerControllers
                 valid: []
             };
 
-            $scope.skillModels = [];
+            $scope.skillModels = event.models;
 
             $scope.form.skills = event.emptySkillObjects;
             $scope.form.loading = event.loadingStatuses;
@@ -359,16 +373,16 @@ routineManagerControllers
             };
 
             $scope.save = function(isValid) {
-                console.log(event.setOrder($scope.skillModels));
-                return;
                 if (isValid) {
 
                     Restangular.all('routines').post({
                         name: $scope.routine.name,
                         description: $scope.routine.description,
                         type: event.key,
-                        skills: _.map($scope.skillModels, function(skillModel) {
-                            return skillModel.id;
+                        skills: _.filter(_.map($scope.skillModels, function(skillModel) {
+                            return (skillModel) ? skillModel.id : skillModel;
+                        }), function(skillModel) {
+                            return !!skillModel;
                         }),
                         order: event.setOrder($scope.skillModels)
                     }).then(function(response) {
@@ -428,6 +442,10 @@ routineManagerControllers
                 id: 0,
                 name: 'None'
             });
+
+            $scope.routineLabel = function(routine) {
+                return routine.name + ((routine.difficulty) ? ' (' + routine.difficulty + ')' : '');
+            };
 
             $scope.activeRoutine = 0;
 

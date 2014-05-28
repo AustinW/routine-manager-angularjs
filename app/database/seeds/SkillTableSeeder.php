@@ -708,7 +708,7 @@ class SkillTableSeeder extends \Illuminate\Database\Seeder
 				"tumbling_difficulty" => 4.5,
 				"fig" => "12.0.0.0 o",
 				"flip_direction" => "b",
-				"occurrence" => 3
+				"occurrence" => 2
 			],
 			[
 				"name" => "Triple Back Pike",
@@ -717,7 +717,7 @@ class SkillTableSeeder extends \Illuminate\Database\Seeder
 				"tumbling_difficulty" => 5.1,
 				"fig" => "12.0.0.0 <",
 				"flip_direction" => "b",
-				"occurrence" => 4
+				"occurrence" => 3
 			],
 			[
 				"name" => "Triple Back Straight",

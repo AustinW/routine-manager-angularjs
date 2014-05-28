@@ -25,7 +25,7 @@
                         id         = "sync_prelim_compulsory"
                         name       = "sync_prelim_compulsory"
                         ng-model   = "chosenRoutines.sync_prelim_compulsory"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.sync_prelim_compulsory)"
                         ng-focus   = "showRoutine(chosenRoutines.sync_prelim_compulsory)"
                     ></select>
@@ -38,7 +38,7 @@
                         id         = "sync_prelim_optional"
                         name       = "sync_prelim_optional"
                         ng-model   = "chosenRoutines.sync_prelim_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.sync_prelim_optional)"
                         ng-focus   = "showRoutine(chosenRoutines.sync_prelim_optional)"
                     ></select>
@@ -51,7 +51,7 @@
                         id         = "sync_final_optional"
                         name       = "sync_final_optional"
                         ng-model   = "chosenRoutines.sync_final_optional"
-                        ng-options = "routine.id as routine.name for routine in routines"
+                        ng-options = "routine.id as routineLabel(routine) for routine in routines"
                         ng-change  = "showRoutine(chosenRoutines.sync_final_optional)"
                         ng-focus   = "showRoutine(chosenRoutines.sync_final_optional)"
                     ></select>

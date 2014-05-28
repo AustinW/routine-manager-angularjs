@@ -15,7 +15,11 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="skill in pass.skills">
-                            <td>{{ $index + 1 }}</td>
+                            <td ng-switch="skill.pivot.order_index">
+                                <span ng-switch-when="0">Mounter</span>
+                                <span ng-switch-when="1">Spotter</span>
+                                <span ng-switch-when="2">Dismount</span>
+                            </td>
                             <td>{{ skill.fig }}</td>
                             <td>{{ skill.doublemini_difficulty }}</td>
                         </tr>
