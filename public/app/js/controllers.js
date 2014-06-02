@@ -550,35 +550,34 @@ routineManagerControllers
             };
         }
     ])
-    .controller('RegisterCtrl', [
-
-        function($scope, $sanitize, $location, Authenticate) {
+    .controller('RegisterCtrl', ['$scope', '$sanitize', '$location', '$http',
+        function($scope, $sanitize, $location, $http) {
 
             /********
              * Alerts
              ********/
-            $scope.alerts = [];
-            $scope.closeAlert = function(index) {
-                $scope.alerts.splice(index, 1);
-            };
+            // $scope.alerts = [];
+            // $scope.closeAlert = function(index) {
+            //     $scope.alerts.splice(index, 1);
+            // };
 
             /********
              * Login
              ********/
-            $scope.login = function() {
-                Authenticate.save({
-                    'email': $sanitize($scope.email),
-                    'password': $sanitize($scope.password)
-                }, function() {
-                    $location.path('/home')
-                    sessionStorage.authenticated = true;
-                }, function(response) {
-                    $scope.alerts = [{
-                        type: "warning",
-                        msg: response.data.message
-                    }];
-                })
-            }
+            // $scope.login = function() {
+            //     Authenticate.save({
+            //         'email': $sanitize($scope.email),
+            //         'password': $sanitize($scope.password)
+            //     }, function() {
+            //         $location.path('/home')
+            //         sessionStorage.authenticated = true;
+            //     }, function(response) {
+            //         $scope.alerts = [{
+            //             type: "warning",
+            //             msg: response.data.message
+            //         }];
+            //     })
+            // }
 
 
         }

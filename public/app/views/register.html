@@ -1,67 +1,111 @@
+<div class="row">
 
-<br><br>
-<div class="container">
-	<form class="form-horizontal" ng-submit="login()">
+	<div class="col-md-12">
 
-		<div class="panel panel-primary">
+		<h1>Registration</h1>
 
-			<div class="panel-heading">
-				<h3 class="panel-title">Register</h3>
-			</div>
+		<form role="form" name="accountForm" ng-submit="save(accountForm.$valid)" novalidate>
+			<fieldset>
+				<p>Welcome to Routine Manager. Please fill out your information.</p>
 
-			<div class="panel-body">
+				<div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
 
-				<alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+				<div class="row">
+					<div class="col-sm-6">
+						<div id="legend">
+							<legend><i class="fa fa-key"></i> Account</legend>
+						</div>
+						
+						<div class="form-group" ng-class="{'has-error' : accountForm.email.$invalid && !accountForm.email.$pristine }">
+							<label class="control-label" for="email">E-mail</label>
+							<div class="controls">
+								<input type="email" name="email" id="email" ng-model="account.email" class="form-control input-lg" required email-available/>
+								<div ng-show="accountForm.email.$dirty">
+									<p ng-show="accountForm.email.$error.required" class="help-block"><span class="label label-danger">Error</span> Please enter your email</p>
+									<p ng-show="accountForm.email.$error.email" class="help-block"><span class="label label-danger">Error</span> This is not a valid email</p>
+									<p ng-show="accountForm.email.$error.checkingEmail" class="help-block"><span class="label label-info"><i class="fa fa-spinner fa-spin"></i> Checking email...</span></p>
+									<p ng-show="accountForm.email.$error.emailAvailable" class="help-block"><span class="label label-danger">Error</span> Email not available</p>
+									<p ng-show="accountForm.email.$valid" class="help-block"><span class="label label-success"><i class="fa fa-check"></i></span> Email is available</p>
+								</div>
+							</div>
+						</div>
 
-				<fieldset>
-					<legend>Login Information</legend>
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="inputEmail">Email</label>
-						<div class="col-md-10">
-							<input type="email" id="inputEmail" placeholder="Email" ng-model="email" required>
+
+						
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Password-->
+							<label class="control-label" for="password">Password</label>
+							<div class="controls">
+								<input type="password" ng-model="account.password" ng-change="checkPassword()" id="password" name="password" class="form-control input-lg" required>
+								<p class="help-block">Password should be at least 4 characters</p>
+							</div>
+						</div>
+						
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Password -->
+							<label class="control-label"  for="password_confirm">Password (Confirm)</label>
+							<div class="controls">
+								<input type="password" ng-model="password_confirm" ng-change="checkPassword()" id="password_confirm" name="password_confirm" class="form-control input-lg" required>
+								<p class="help-block">Please confirm password</p>
+							</div>
 						</div>
 					</div>
+					<div class="col-sm-6">
+						<div id="legend">
+							<legend class=""><i class="fa fa-user"></i> Information</legend>
+						</div>
 
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="inputPassword">Password</label>
-						<div class="col-md-10">
-							<input type="password" ng-pattern="/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,18}/" min="6" maxlength="18" id="inputPassword" placeholder="Password" ng-model="password1" required>
-							<span class="help-block">Must include at least one number, lowercase letter, uppercase letter and must be between 6 and 16 characters long.</span>
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Name -->
+							<label class="control-label" for="email">Name</label>
+							<div class="controls">
+								<div class="row">
+									<div class="col-xs-6">
+										<input type="text" ng-model="account.first_name" id="first_name" name="first_name" placeholder="First name" class="form-control input-lg" required>
+										<p class="help-block">Please provide your first name</p>
+									</div>
+
+									<div class="col-xs-6">
+										<input type="text" ng-model="account.last_name" id="last_name" name="last_name" placeholder="Last name" class="form-control input-lg" required>
+										<p class="help-block">Please provide your last name</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Gym USAG Number -->
+							<label class="control-label"  for="gym_usag_id">Gym USAG #</label>
+							<div class="controls">
+								<input type="text" ng-model="account.gym_usag_id" id="gym_usag_id" name="gym_usag_id" class="form-control input-lg" ng-pattern="">
+								<p class="help-block">Please provide your gym/club usag number</p>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Team -->
+							<label class="control-label"  for="team">Team Name</label>
+							<div class="controls">
+								<input type="text" ng-model="account.team" id="team" name="team" class="form-control input-lg">
+								<p class="help-block">Please provide your team name</p>
+							</div>
 						</div>
 					</div>
+				</div>
 
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="inputPassword">Confirm Password</label>
-						<div class="col-md-10">
-							<input type="password" ng-pattern="/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,18}/" min="6" maxlength="18" id="inputPassword" placeholder="Password" ng-model="password2" required>
-							<span class="help-block">Must include at least one number, lowercase letter, uppercase letter and must be between 6 and 16 characters long.</span>
+				<pre>{{ account }}</pre>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+							<!-- Button -->
+							<div class="controls">
+								<button class="btn btn-success btn-lg" type="submit">Register</button>
+							</div>
 						</div>
 					</div>
-
-				</fieldset>
-
-				<fieldset>
-					<legend>Personal Information</legend>
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="inputEmail">First Name</label>
-						<div class="col-md-10">
-							<input type="email" id="inputEmail" placeholder="Jogn" ng-model="firstName" required>
-						</div>
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<div class="form-group">
-						<div class="col-md-offset-2 col-md-10">
-							<button type="submit" class="btn">Sign in</button>
-						</div>
-					</div>
-				</fieldset>
-
-
-			</div>
-
-		</div>
-
-	</form>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 </div>

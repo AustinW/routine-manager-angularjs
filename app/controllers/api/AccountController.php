@@ -103,4 +103,17 @@ class AccountController extends BaseController {
 			return Response::apiMessage(Lang::get('auth.registered'));
 		}
 	}
+
+	public function getEmailAvailable()
+	{
+		$validation = Validator::make(Input::all(), ['email' => 'required|email']);
+
+		if ($validation->fails()) {
+			return Response::apiValidationError($validation, Input::all(), Lang::get('auth.missing_fields'));
+		}
+
+		$email = Input::get('email');
+
+		return ['available' => ! $this->userRepository->where('email', $email)->count(), 'valid' => true];
+	}
 }

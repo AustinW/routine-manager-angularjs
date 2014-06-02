@@ -37,6 +37,14 @@ angular.module('myApp', [
                         authorizedRoles: null
                     }
                 })
+                .state('register', {
+                    url: '/register',
+                    templateUrl: '/app/views/register.html',
+                    controller: 'RegisterCtrl',
+                    data: {
+                        authorizedRoles: null
+                    }
+                })
                 .state('logout', {
                     url: '/logout',
                     controller: 'LogoutCtrl',

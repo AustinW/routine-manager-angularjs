@@ -78,7 +78,7 @@
 							<li ng-if="currentUser"><a href="/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 							
 							<li ng-if="!currentUser"><a href="/login"><i class="fa fa-sign-in"></i> Login</a></li>
-							<li ng-if="!currentUser"><a href="#"><i class="fa fa-edit"></i> Register</a></li>
+							<li ng-if="!currentUser"><a href="/register"><i class="fa fa-edit"></i> Register</a></li>
 							<!-- {{/if}} -->
 						</ul>
 					</li>
