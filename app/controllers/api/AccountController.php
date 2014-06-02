@@ -2,7 +2,9 @@
 
 namespace Api;
 
-use \User, \Validator, \Input, \Auth, \Response, \Lang;
+use \User, \Validator, \Input, \Auth, \Response, \Lang, \App, \Event;
+
+use \DateTime;
 
 class AccountController extends BaseController {
 	
@@ -72,28 +74,28 @@ class AccountController extends BaseController {
 
 	public function postRegister()
 	{
-		$input = Input::all();
-
-		$validation = Validator::make($input, [
-			'email'      => 'required|email|unique:users|max:100',
-			'password'   => 'required|confirmed',
-			'first_name' => 'required|max:50',
-			'last_name'  => 'required|max:50',
-			'terms'      => 'accepted',
+		$validation = Validator::make(Input::all(), [
+			'email'       => 'required|email|unique:users|max:100',
+			'password'    => 'required|confirmed',
+			'first_name'  => 'required|max:50',
+			'last_name'   => 'required|max:50',
+			'gym_usag_id' => 'required|digits:6',
+			'team'        => 'required|max:100',
+			'terms'       => 'accepted',
 		]);
 
 		if ($validation->fails()) {
 
-			return Response::apiError($validation);
+			return Response::apiValidationError($validation, Input::all(), Lang::get('auth.registration_failed'));
 
 		} else {
+			$newUser = $this->userRepository->create(Input::only(['email', 'password', 'first_name', 'last_name', 'gym_usag_id', 'team']));
 
-			$newUser = $this->userRepository->create([
-				'email'      => $input['email'],
-				'password'   => $input['password'],
-				'first_name' => $input['first_name'],
-				'last_name'  => $input['last_name']
-			]);
+			// Automatically verify the account if it is local
+			if (App::environment() == 'local') {
+				$newUser->verified_at = new DateTime();
+				$newUser->save();
+			}
 
 			// Fire off an event that a user is registered (maybe fire off an email?)
 			Event::fire('account.registered', [$newUser]);

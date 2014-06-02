@@ -2,11 +2,24 @@
 
 	<div class="col-md-12">
 
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+					<strong>{{ alert.title }}</strong> {{ alert.message }}
+					<ul ng-if="alert.error_list">
+						<li ng-repeat="errorField in alert.error_list.fields">
+							{{ errorField }}: {{ alert.error_list.messages[$index] }}
+						</li>
+					</ul>
+				</alert>
+			</div>
+		</div>
+
 		<h1>Registration</h1>
 
-		<form role="form" name="accountForm" ng-submit="save(accountForm.$valid)" novalidate>
+		<form role="form" name="accountForm" ng-submit="register(accountForm.$valid)" novalidate>
 			<fieldset>
-				<p>Welcome to Routine Manager. Please fill out your information.</p>
+				<p ng-show="accountForm.$pristine">Welcome to Routine Manager. Please fill out your information.</p>
 
 				<div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
 
@@ -30,23 +43,21 @@
 							</div>
 						</div>
 
-
-						
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+						<div class="form-group" ng-class="{'has-error' : accountForm.password.$invalid && !accountForm.password.$pristine }">
 							<!-- Password-->
 							<label class="control-label" for="password">Password</label>
 							<div class="controls">
-								<input type="password" ng-model="account.password" ng-change="checkPassword()" id="password" name="password" class="form-control input-lg" required>
-								<p class="help-block">Password should be at least 4 characters</p>
+								<input type="password" ng-model="account.password" ng-change="checkPassword()" id="password" name="password" class="form-control input-lg" ng-pattern="/^.{7,}$/" required>
+								<p ng-show="accountForm.password.$dirty && accountForm.password.$invalid" class="help-block">Password should be at least 7 characters and match</p>
 							</div>
 						</div>
 						
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+						<div class="form-group" ng-class="{'has-error' : accountForm.password_confirm.$invalid && !accountForm.password_confirm.$pristine }">
 							<!-- Password -->
 							<label class="control-label"  for="password_confirm">Password (Confirm)</label>
 							<div class="controls">
-								<input type="password" ng-model="password_confirm" ng-change="checkPassword()" id="password_confirm" name="password_confirm" class="form-control input-lg" required>
-								<p class="help-block">Please confirm password</p>
+								<input type="password" ng-model="password_confirm" ng-change="checkPassword()" id="password_confirm" name="password_confirm" class="form-control input-lg" ng-pattern="/^.{7,}$/" required>
+								<p ng-show="accountForm.password_confirm.$dirty && accountForm.password_confirm.$invalid" class="help-block">Please confirm password</p>
 							</div>
 						</div>
 					</div>
@@ -55,39 +66,54 @@
 							<legend class=""><i class="fa fa-user"></i> Information</legend>
 						</div>
 
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+						<div class="form-group" ng-class="{'has-error' : (accountForm.first_name.$invalid || accountForm.last_name.$invalid) && ( ! accountForm.first_name.$pristine || ! accountForm.last_name.$pristine) }">
 							<!-- Name -->
 							<label class="control-label" for="email">Name</label>
 							<div class="controls">
 								<div class="row">
 									<div class="col-xs-6">
 										<input type="text" ng-model="account.first_name" id="first_name" name="first_name" placeholder="First name" class="form-control input-lg" required>
-										<p class="help-block">Please provide your first name</p>
+										<p ng-show="accountForm.first_name.$dirty && accountForm.first_name.$invalid" class="help-block">Please provide your first name</p>
 									</div>
 
 									<div class="col-xs-6">
 										<input type="text" ng-model="account.last_name" id="last_name" name="last_name" placeholder="Last name" class="form-control input-lg" required>
-										<p class="help-block">Please provide your last name</p>
+										<p ng-show="accountForm.last_name.$dirty && accountForm.last_name.$invalid" class="help-block">Please provide your last name</p>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+						<div class="form-group" ng-class="{'has-error' : accountForm.gym_usag_id.$invalid && accountForm.gym_usag_id.$dirty }">
 							<!-- Gym USAG Number -->
 							<label class="control-label"  for="gym_usag_id">Gym USAG #</label>
 							<div class="controls">
-								<input type="text" ng-model="account.gym_usag_id" id="gym_usag_id" name="gym_usag_id" class="form-control input-lg" ng-pattern="">
-								<p class="help-block">Please provide your gym/club usag number</p>
+								<input type="text" ng-model="account.gym_usag_id" id="gym_usag_id" name="gym_usag_id" class="form-control input-lg" ng-pattern="/^\d{6}$/" required>
+								<p ng-show="accountForm.gym_usag_id.$dirty && accountForm.gym_usag_id.$invalid" class="help-block">Please provide your gym/club usag number (6 digits)</p>
 							</div>
 						</div>
 
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
+						<div class="form-group" ng-class="{'has-error' : accountForm.team.$invalid && !accountForm.team.$pristine }">
 							<!-- Team -->
 							<label class="control-label"  for="team">Team Name</label>
 							<div class="controls">
-								<input type="text" ng-model="account.team" id="team" name="team" class="form-control input-lg">
-								<p class="help-block">Please provide your team name</p>
+								<input type="text" ng-model="account.team" id="team" name="team" class="form-control input-lg" required>
+								<p ng-show="accountForm.team.$dirty && accountForm.team.$invalid" class="help-block">Please provide your team name</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group well" ng-class="{'has-error' : accountForm.terms.$invalid && !accountForm.terms.$pristine }">
+							<!-- Team -->
+							<label class="control-label"  for="terms">Terms &amp; Conditions</label>
+							<div class="controls">
+								<label class="terms-agreement">
+									<input type="checkbox" ng-model="account.terms" id="terms" name="terms" class="" required>
+									&nbsp; Please accept the <a href="/terms.html" target="_blank">Terms and Conditions</a> before proceeding.
+								</label>
 							</div>
 						</div>
 					</div>
@@ -97,11 +123,9 @@
 
 				<div class="row">
 					<div class="col-md-12">
-						<div class="form-group" ng-class="{'has-error' : athleteForm.first_name.$invalid && !athleteForm.first_name.$pristine }">
-							<!-- Button -->
-							<div class="controls">
-								<button class="btn btn-success btn-lg" type="submit">Register</button>
-							</div>
+						<!-- Button -->
+						<div class="controls">
+							<button class="btn btn-success btn-lg" type="submit" ng-disabled="accountForm.$invalid">Register</button>
 						</div>
 					</div>
 				</div>

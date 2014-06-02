@@ -34,22 +34,23 @@ routineManagerDirectives
             }
         }
     ])
-    .directive('emailAvailable', function($http, $timeout) { // available
+    .directive('emailAvailable', function($http, $timeout) {
+        // http://plnkr.co/edit/6r7y0R441ffhGkqqOZ6P?p=preview
         return {
             require: 'ngModel',
             link: function(scope, elem, attr, ctrl) {
-                console.log(ctrl);
                 ctrl.$parsers.push(function(viewValue) {
-                    // set it to true here, otherwise it will not 
+
+                    // Set it to true here, otherwise it will not 
                     // clear out when previous validators fail.
                     ctrl.$setValidity('emailAvailable', true);
+
                     if (ctrl.$valid) {
-                        // set it to false here, because if we need to check 
+                        // Set it to false here, because if we need to check 
                         // the validity of the email, it's invalid until the 
                         // AJAX responds.
                         ctrl.$setValidity('checkingEmail', false);
 
-                        // now do your thing, chicken wing.
                         if (viewValue !== "" && typeof viewValue !== "undefined") {
                             $http.get('/api/account/email-available?email=' + viewValue)
                                 .success(function(data, status, headers, config) {
