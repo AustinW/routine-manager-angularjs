@@ -1,5 +1,4 @@
-var routineManagerFilters = angular.module('routineManager.filters', []);
-routineManagerFilters
+angular.module('routineManager.filters', [])
     .filter('getById', function() {
         return function(input, id) {
             for (var i = 0, len = input.length; i < len; i++) {
@@ -24,4 +23,9 @@ routineManagerFilters
 
             return null;
         }
+    })
+    .filter('capitalize', function() {
+        return function(input) {
+            return input.charAt(0).toUpperCase() + input.toLowerCase().substr(1);
+        };
     });

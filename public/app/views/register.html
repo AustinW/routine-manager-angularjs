@@ -8,7 +8,7 @@
 					<strong>{{ alert.title }}</strong> {{ alert.message }}
 					<ul ng-if="alert.error_list">
 						<li ng-repeat="errorField in alert.error_list.fields">
-							{{ errorField }}: {{ alert.error_list.messages[$index] }}
+							{{ errorField | capitalize }}: {{ alert.error_list.messages[$index] }}
 						</li>
 					</ul>
 				</alert>
@@ -21,8 +21,6 @@
 			<fieldset>
 				<p ng-show="accountForm.$pristine">Welcome to Routine Manager. Please fill out your information.</p>
 
-				<div ng-if="error" class="alert alert-danger"><strong>Error!</strong> {{ error }}</div>
-
 				<div class="row">
 					<div class="col-sm-6">
 						<div id="legend">
@@ -32,7 +30,7 @@
 						<div class="form-group" ng-class="{'has-error' : accountForm.email.$invalid && !accountForm.email.$pristine }">
 							<label class="control-label" for="email">E-mail</label>
 							<div class="controls">
-								<input type="email" name="email" id="email" ng-model="account.email" class="form-control input-lg" required email-available/>
+								<input autocomplete="off" type="email" name="email" id="email" ng-model="account.email" class="form-control input-lg" required email-available/>
 								<div ng-show="accountForm.email.$dirty">
 									<p ng-show="accountForm.email.$error.required" class="help-block"><span class="label label-danger">Error</span> Please enter your email</p>
 									<p ng-show="accountForm.email.$error.email" class="help-block"><span class="label label-danger">Error</span> This is not a valid email</p>
@@ -45,7 +43,7 @@
 
 						<div class="form-group" ng-class="{'has-error' : accountForm.password.$invalid && !accountForm.password.$pristine }">
 							<!-- Password-->
-							<label class="control-label" for="password">Password</label>
+							<label class="control-label" for="password" show-valid="account.password">Password <i ng-show="accountForm.password.$valid && accountForm.password_confirm.$valid" class="fa fa-check fa-green"></i></label>
 							<div class="controls">
 								<input type="password" ng-model="account.password" ng-change="checkPassword()" id="password" name="password" class="form-control input-lg" ng-pattern="/^.{7,}$/" required>
 								<p ng-show="accountForm.password.$dirty && accountForm.password.$invalid" class="help-block">Password should be at least 7 characters and match</p>
@@ -54,10 +52,10 @@
 						
 						<div class="form-group" ng-class="{'has-error' : accountForm.password_confirm.$invalid && !accountForm.password_confirm.$pristine }">
 							<!-- Password -->
-							<label class="control-label"  for="password_confirm">Password (Confirm)</label>
+							<label class="control-label"  for="password_confirm">Password (Confirm) <i ng-show="accountForm.password.$valid && accountForm.password_confirm.$valid" class="fa fa-check fa-green"></i></label>
 							<div class="controls">
-								<input type="password" ng-model="password_confirm" ng-change="checkPassword()" id="password_confirm" name="password_confirm" class="form-control input-lg" ng-pattern="/^.{7,}$/" required>
-								<p ng-show="accountForm.password_confirm.$dirty && accountForm.password_confirm.$invalid" class="help-block">Please confirm password</p>
+								<input type="password" ng-model="password_confirm" ng-pattern="/^.{7,}$/" pw-match="account.password" id="password_confirm" name="password_confirm" class="form-control input-lg" required>
+								<p ng-show="accountForm.password_confirm.$error.match" class="help-block">Passwords do not match!</p>
 							</div>
 						</div>
 					</div>
@@ -88,7 +86,7 @@
 							<!-- Gym USAG Number -->
 							<label class="control-label"  for="gym_usag_id">Gym USAG #</label>
 							<div class="controls">
-								<input type="text" ng-model="account.gym_usag_id" id="gym_usag_id" name="gym_usag_id" class="form-control input-lg" ng-pattern="/^\d{6}$/" required>
+								<input type="number" ng-model="account.gym_usag_id" id="gym_usag_id" name="gym_usag_id" class="form-control input-lg" ng-pattern="/^\d{6}$/" required>
 								<p ng-show="accountForm.gym_usag_id.$dirty && accountForm.gym_usag_id.$invalid" class="help-block">Please provide your gym/club usag number (6 digits)</p>
 							</div>
 						</div>

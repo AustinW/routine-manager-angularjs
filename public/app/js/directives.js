@@ -72,20 +72,22 @@ routineManagerDirectives
             }
         };
     })
-    .directive('pwCheck', [
+    .directive('pwMatch', [
 
         function() {
             return {
                 require: 'ngModel',
+                restrict: 'A',
+                scope: {
+                    match: '='
+                },
                 link: function(scope, elem, attrs, ctrl) {
-                    var firstPassword = '#' + attrs.pwCheck;
-                    elem.add(firstPassword).on('keyup', function() {
-                        scope.$apply(function() {
-                            var v = elem.val() === $(firstPassword).val();
-                            ctrl.$setValidity('pwmatch', v);
-                        });
+                    scope.$watch(function() {
+                        return (ctrl.$pristine && angular.isUndefined(ctrl.$modelValue)) || scope.match === ctrl.$modelValue;
+                    }, function(currentValue) {
+                        ctrl.$setValidity('match', currentValue);
                     });
                 }
-            }
+            };
         }
     ]);
