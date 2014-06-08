@@ -10,7 +10,7 @@
  */
 
 return array(
-    'pdftk' => '/usr/local/bin/pdftk',
+    'pdftk' => 'pdftk',
 
     'storage' => array(
     	'tmp' => storage_path() . DIRECTORY_SEPARATOR . 'tmp',
