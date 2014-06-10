@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="application">
 
 <head>
 	<meta charset="utf-8">
@@ -13,7 +13,7 @@
 
 </head>
 
-<body ng-controller="ApplicationCtrl">
+<body ng-controller="ApplicationController">
 
 <div class="container">
 	<div class="header">
@@ -33,7 +33,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Athletes <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li ng-controller="AthleteNewCtrl"><a href="#" ng-click="open()">New</a></li>
+							<li ng-controller="AthleteNewController"><a href="#" ng-click="open()">New</a></li>
 							<li><a href="/athletes">View</a></li>
 							<!-- <li><a href="#">Search</a></li> -->
 						</ul>
@@ -43,7 +43,7 @@
 						<ul class="dropdown-menu">
 							<li>
 								<a href="#">New</a>
-								<ul class="dropdown-menu" ng-controller="RoutineNewCtrl">
+								<ul class="dropdown-menu" ng-controller="RoutineNewController">
 									<li><a href="#" ng-click="openTrampoline()">Trampoline</a></li>
 									<li><a href="#" ng-click="openDoubleMini()">Double-Mini</a></li>
 									<li><a href="#" ng-click="openTumbling()">Tumbling</a></li>
@@ -114,20 +114,16 @@
 	</div>
 </div>
 
-
+<!-- DEVELOPMENT -->
 <script src="/assets/tmp/concat.js"></script>
+<script src="/assets/tmp/app.js"></script>
 
-<script src="/app/js/app.js"></script>
-<script src="/app/js/controllers.js"></script>
-<script src="/app/js/directives.js"></script>
-<script src="/app/js/providers.js"></script>
-<!-- <script src="/app/js/filters.js"></script> -->
-<script src="/app/js/services.js"></script>
-<script src="/app/js/factories.js"></script>
-<script src="/app/js/filters.js"></script>
+<!-- PRODUCTION -->
+<!-- <script src="/assets/script.min.js"></script> -->
+
 <script>
-	var myApp = angular.module('myApp');
-	myApp.constant("CSRF_TOKEN", '<?php echo csrf_token(); ?>');
+	
+	App.Constants.constant("CSRF_TOKEN", '<?php echo csrf_token(); ?>');
 
 	//Chrome passes the error object (5th param) which we must use since it now truncates the Msg (1st param).
 	window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject) {
@@ -142,13 +138,6 @@
 		console.error(errMsg);
 	}
 
-	var throwError = function () {
-		throw new Error(
-		'Something went wrong. Something went wrong. Something went wrong. Something went wrong. ' +
-		'Something went wrong. Something went wrong. Something went wrong. Something went wrong. ' + 
-		'Something went wrong. Something went wrong. Something went wrong. Something went wrong. ' + 
-		'Text does not get truncated! :-)');
-	}
 </script>
 
 </body>

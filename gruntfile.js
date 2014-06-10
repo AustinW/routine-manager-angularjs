@@ -268,7 +268,7 @@ module.exports = function(grunt) {
                 src: ['<%= assetsDir %>/tmp/bootstrap.css', '<%= assetsDir %>/tmp/font-awesome.css', '<%= assetsDir %>/tmp/style.css', '<%= assetsDir %>/tmp/google-fonts.css'],
                 dest: '<%= assetsDir %>/tmp/concat.css'
             },
-            js: {
+            vendor_js: {
                 src: [
                     '<%= assetsDir %>/js/angular.js',
                     '<%= assetsDir %>/js/angular-cookies.js',
@@ -289,7 +289,25 @@ module.exports = function(grunt) {
                     '<%= assetsDir %>/js/jquery.js',
                     '<%= assetsDir %>/js/bootstrap.js'
                 ],
+
                 dest: '<%= assetsDir %>/tmp/concat.js'
+            },
+            app_js: {
+                options: {
+                    // Replace all 'use strict' statements in the code with a single one at the top
+                    banner: "'use strict';\n",
+                    process: function(src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                            src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
+                },
+                src: [
+                    // Compile the application configuration first, everything else after (no duplicates)
+                    '<%= appDir %>/application/application.js',
+                    '<%= appDir %>/**/*.js'
+                ],
+
+                dest: '<%= assetsDir %>/tmp/app.js'
             }
         },
 
@@ -311,14 +329,23 @@ module.exports = function(grunt) {
             },
             my_target: {
                 files: {
-                    '<%= assetsDir %>/script.min.js': ['<%= assetsDir %>/tmp/concat.js']
+                    '<%= assetsDir %>/script.min.js': [
+                        '<%= assetsDir %>/tmp/concat.js',
+                        '<%= assetsDir %>/tmp/app.js',
+                    ]
                 }
             }
         },
 
         watch: {
-            files: ['<%= assetsDir %>/less/**/*.less'],
-            tasks: ['watching']
+            files: [
+                '<%= assetsDir %>/less/**/*.less',
+                '<%= appDir %>/**/*.js'
+            ],
+            tasks: ['watching'],
+            options: {
+                livereload: true
+            }
         }
 
     });
@@ -332,6 +359,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('default', ['copy', 'less', 'concat', 'cssmin', 'uglify' /*, 'clean'*/ ]);
-    grunt.registerTask('watching', ['less', 'concat', 'cssmin', 'clean']);
+    grunt.registerTask('watching', ['less', 'concat', 'cssmin', 'watch']);
 
 };

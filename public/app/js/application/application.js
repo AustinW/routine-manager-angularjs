@@ -1,6 +1,14 @@
 'use strict';
 
-angular.module('myApp', [
+var App = App || {};
+
+App.Constants = angular.module('application.constants', []);
+App.Services = angular.module('application.services', []);
+App.Controllers = angular.module('application.controllers', []);
+App.Filters = angular.module('application.filters', []);
+App.Directives = angular.module('application.directives', []);
+
+angular.module('application', [
     'ngResource',
     'ngSanitize',
     'ui.bootstrap',
@@ -9,12 +17,11 @@ angular.module('myApp', [
     'angular-flash.flash-alert-directive',
     'restangular',
 
-    'routineManager.controllers',
-    'routineManager.services',
-    'routineManager.factories',
-    'routineManager.directives',
-    'routineManager.providers',
-    'routineManager.filters',
+    'application.filters',
+    'application.services',
+    'application.directives',
+    'application.constants',
+    'application.controllers'
 ])
     .config(['$locationProvider', '$urlRouterProvider', '$stateProvider', 'USER_ROLES',
 
@@ -24,7 +31,7 @@ angular.module('myApp', [
                 .state('home', {
                     url: '/',
                     templateUrl: '/app/views/home.html',
-                    controller: 'HomeCtrl',
+                    controller: 'HomeController',
                     data: {
                         authorizedRoles: null // any
                     }
@@ -32,7 +39,7 @@ angular.module('myApp', [
                 .state('login', {
                     url: '/login',
                     templateUrl: '/app/views/login.html',
-                    controller: 'LoginCtrl',
+                    controller: 'LoginController',
                     data: {
                         authorizedRoles: null
                     }
@@ -40,14 +47,14 @@ angular.module('myApp', [
                 .state('register', {
                     url: '/register',
                     templateUrl: '/app/views/register.html',
-                    controller: 'RegisterCtrl',
+                    controller: 'RegisterController',
                     data: {
                         authorizedRoles: null
                     }
                 })
                 .state('logout', {
                     url: '/logout',
-                    controller: 'LogoutCtrl',
+                    controller: 'LogoutController',
                     data: {
                         authorizedRoles: null
                     }
@@ -55,7 +62,7 @@ angular.module('myApp', [
                 .state('athletes', {
                     url: '/athletes',
                     templateUrl: '/app/views/athletes.html',
-                    controller: 'AthleteListCtrl',
+                    controller: 'AthleteListController',
                     data: {
                         authorizedRoles: [USER_ROLES.coach]
                     }
@@ -63,7 +70,7 @@ angular.module('myApp', [
                 .state('athletes-view', {
                     url: '/athletes/:athlete_id',
                     templateUrl: '/app/views/athletes/view.html',
-                    controller: 'AthleteViewCtrl',
+                    controller: 'AthleteViewController',
                     data: {
                         authorizedRoles: [USER_ROLES.coach]
                     }
@@ -89,38 +96,42 @@ angular.module('myApp', [
             flashProvider.successClassnames.push('alert-success');
         }
     ])
-    .config(function($httpProvider) {
-        var interceptor = function($rootScope, $location, $q, flash) {
+    .config(['$httpProvider',
+        function($httpProvider) {
+            var interceptor = function($rootScope, $location, $q, flash) {
 
-            var success = function(response) {
-                return response;
-            }
-
-            var error = function(response) {
-                if (response.status == 401) {
-                    delete sessionStorage.authenticated;
-                    $location.path('/login');
-
-                    flash.error = 'You must be logged in before accessing that feature.';
+                var success = function(response) {
+                    return response;
                 }
 
-                return $q.reject(response)
-            }
-            return function(promise) {
-                return promise.then(success, error)
-            }
-        }
-        $httpProvider.responseInterceptors.push(interceptor)
+                var error = function(response) {
+                    if (response.status == 401) {
+                        delete sessionStorage.authenticated;
+                        $location.path('/login');
 
-    })
-    .config(function($httpProvider) {
-        $httpProvider.interceptors.push([
-            '$injector',
-            function($injector) {
-                return $injector.get('AuthInterceptor');
+                        flash.error = 'You must be logged in before accessing that feature.';
+                    }
+
+                    return $q.reject(response)
+                }
+                return function(promise) {
+                    return promise.then(success, error)
+                }
             }
-        ]);
-    })
+            $httpProvider.responseInterceptors.push(interceptor)
+
+        }
+    ])
+    .config(['$httpProvider',
+        function($httpProvider) {
+            $httpProvider.interceptors.push([
+                '$injector',
+                function($injector) {
+                    return $injector.get('AuthInterceptor');
+                }
+            ]);
+        }
+    ])
     .run(['$rootScope', '$http', 'CSRF_TOKEN', 'AuthService', 'AUTH_EVENTS',
         function($rootScope, $http, CSRF_TOKEN, AuthService, AUTH_EVENTS) {
             $http.defaults.headers.common['csrf_token'] = CSRF_TOKEN;
@@ -213,4 +224,4 @@ angular.module('myApp', [
         'sync_prelim_compulsory', 'sync_prelim_optional', 'sync_final_optional',
         'dmt_pass_1', 'dmt_pass_2', 'dmt_pass_3', 'dmt_pass_4',
         'tum_pass_1', 'tum_pass_2', 'tum_pass_3', 'tum_pass_4'
-    ])
+    ]);
