@@ -117,6 +117,7 @@
 <!-- DEVELOPMENT -->
 <script src="/assets/tmp/concat.js"></script>
 <script src="/assets/tmp/app.js"></script>
+<script src="/assets/tmp/templates.js"></script>
 
 <!-- PRODUCTION -->
 <!-- <script src="/assets/script.min.js"></script> -->

@@ -30,7 +30,7 @@ angular.module('application', [
             $stateProvider
                 .state('home', {
                     url: '/',
-                    templateUrl: '/app/views/home.html',
+                    templateUrl: '/app/templates/home.html',
                     controller: 'HomeController',
                     data: {
                         authorizedRoles: null // any
@@ -38,7 +38,7 @@ angular.module('application', [
                 })
                 .state('login', {
                     url: '/login',
-                    templateUrl: '/app/views/login.html',
+                    templateUrl: '/app/templates/login.html',
                     controller: 'LoginController',
                     data: {
                         authorizedRoles: null
@@ -46,7 +46,7 @@ angular.module('application', [
                 })
                 .state('register', {
                     url: '/register',
-                    templateUrl: '/app/views/register.html',
+                    templateUrl: '/app/templates/register.html',
                     controller: 'RegisterController',
                     data: {
                         authorizedRoles: null
@@ -61,7 +61,7 @@ angular.module('application', [
                 })
                 .state('athletes', {
                     url: '/athletes',
-                    templateUrl: '/app/views/athletes.html',
+                    templateUrl: '/app/templates/athletes.html',
                     controller: 'AthleteListController',
                     data: {
                         authorizedRoles: [USER_ROLES.coach]
@@ -69,7 +69,7 @@ angular.module('application', [
                 })
                 .state('athletes-view', {
                     url: '/athletes/:athlete_id',
-                    templateUrl: '/app/views/athletes/view.html',
+                    templateUrl: '/app/templates/athletes/view.html',
                     controller: 'AthleteViewController',
                     data: {
                         authorizedRoles: [USER_ROLES.coach]

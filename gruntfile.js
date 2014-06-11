@@ -7,6 +7,7 @@ module.exports = function(grunt) {
         bowerDir: 'public/vendor',
         assetsDir: 'public/assets',
         appDir: 'public/app/js',
+        templatesDir: 'app/templates',
 
         clean: ['<%= assetsDir %>/tmp'],
 
@@ -64,7 +65,7 @@ module.exports = function(grunt) {
                     cwd: '<%= bowerDir %>/ie-html5/dist',
                     src: ['*'],
                     dest: '<%= assetsDir %>/js'
-                }, ]
+                }]
             },
             iejson: {
                 files: [{
@@ -263,6 +264,14 @@ module.exports = function(grunt) {
             }
         },
 
+        ngtemplates: {
+            application: {
+                src: '<%= templatesDir %>/**/*.html',
+                dest: '<%= assetsDir %>/tmp/templates.js',
+                cwd: 'public'
+            }
+        },
+
         concat: {
             css: {
                 src: ['<%= assetsDir %>/tmp/bootstrap.css', '<%= assetsDir %>/tmp/font-awesome.css', '<%= assetsDir %>/tmp/style.css', '<%= assetsDir %>/tmp/google-fonts.css'],
@@ -299,7 +308,7 @@ module.exports = function(grunt) {
                     process: function(src, filepath) {
                         return '// Source: ' + filepath + '\n' +
                             src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-                    },
+                    }
                 },
                 src: [
                     // Compile the application configuration first, everything else after (no duplicates)
@@ -332,6 +341,7 @@ module.exports = function(grunt) {
                     '<%= assetsDir %>/script.min.js': [
                         '<%= assetsDir %>/tmp/concat.js',
                         '<%= assetsDir %>/tmp/app.js',
+                        '<%= assetsDir %>/tmp/templates.js'
                     ]
                 }
             }
@@ -340,7 +350,9 @@ module.exports = function(grunt) {
         watch: {
             files: [
                 '<%= assetsDir %>/less/**/*.less',
-                '<%= appDir %>/**/*.js'
+                '<%= appDir %>/**/*.js',
+                'gruntfile.js',
+                'app/views/index.php'
             ],
             tasks: ['watching'],
             options: {
@@ -357,8 +369,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-angular-templates');
 
-    grunt.registerTask('default', ['copy', 'less', 'concat', 'cssmin', 'uglify' /*, 'clean'*/ ]);
-    grunt.registerTask('watching', ['less', 'concat', 'cssmin', 'watch']);
+    grunt.registerTask('default', ['copy', 'less', 'ngtemplates', 'concat', 'cssmin', 'uglify' /*, 'clean'*/ ]);
+    grunt.registerTask('app', ['less', 'ngtemplates', 'concat', 'cssmin', 'uglify' /*, 'clean'*/ ]);
+    grunt.registerTask('watching', ['less', 'ngtemplates', 'concat', 'cssmin']);
 
 };
