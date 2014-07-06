@@ -2,7 +2,7 @@ angular.module('application').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('app/templates/athletes.html',
-    "<div class=\"row\">\n" +
+    "<div class=\"row\" ng-init=\"allCompcards = true\">\n" +
     "\t<div class=\"col-md-12\">\n" +
     "\t\t\n" +
     "\t\t<table class=\"table table-striped table-bordered table-hover table-responsive\">\n" +
@@ -480,7 +480,7 @@ angular.module('application').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('app/templates/modals/athlete.html',
-    "<form class=\"form-horizontal\" role=\"form\" name=\"athleteForm\" ng-submit=\"save(athleteForm.$valid)\" novalidate>\n" +
+    "<form class=\"form-horizontal\" role=\"form\" name=\"athleteForm\" ng-submit=\"save()\" novalidate>\n" +
     "    <div class=\"modal-header\">\n" +
     "        <h3>{{ title }}</h3>\n" +
     "    </div>\n" +
@@ -518,6 +518,14 @@ angular.module('application').run(['$templateCache', function($templateCache) {
     "                <input type=\"date\" placeholder=\"yyyy-mm-dd\" id=\"birthday\" name=\"birthday\" class=\"form-control\" ng-model=\"athlete.birthday\" required>\n" +
     "\n" +
     "                <p ng-show=\"athleteForm.birthday.$invalid && !athleteForm.birthday.$pristine\" class=\"help-block\">Athlete's birthday is required and must be a valid date (yyyy-mm-dd).</p>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"form-group\" ng-class=\"{'has-error' : athleteForm.usag_id.$invalid && athleteForm.usag_id.$dirty }\">\n" +
+    "            <!-- Gym USAG Number -->\n" +
+    "            <label class=\"col-sm-4 control-label\"  for=\"usag_id\">USAG #</label>\n" +
+    "            <div class=\"col-sm-8\">\n" +
+    "                <input type=\"number\" ng-model=\"athlete.usag_id\" id=\"usag_id\" name=\"usag_id\" class=\"form-control\" ng-pattern=\"/^\\d{6}$/\" required>\n" +
+    "                <p ng-show=\"athleteForm.usag_id.$dirty && athleteForm.usag_id.$invalid\" class=\"help-block\">Please provide the athlete's usag number (6 digits)</p>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\" ng-class=\"{'has-error' : athleteForm.team.$invalid && !athleteForm.team.$pristine }\">\n" +

@@ -1,11 +1,9 @@
 'use strict'
 
-App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstance', '$location', 'Restangular', 'athlete', 'LEVELS', 'AthleteService',
-    function($scope, $modalInstance, $location, Restangular, originalAthlete, LEVELS, AthleteService) {
+App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstance', '$location', 'Restangular', 'athlete', 'title', 'LEVELS', 'AthleteFactory',
+    function($scope, $modalInstance, $location, Restangular, originalAthlete, title, LEVELS, AthleteFactory) {
 
         $scope.athlete = Restangular.copy(originalAthlete);
-
-        console.log('Athlete: ', $scope.athlete);
 
         $scope.athlete.trampoline_level = $scope.athlete.trampoline_level ? $scope.athlete.trampoline_level : '0';
         $scope.athlete.synchro_level = $scope.athlete.synchro_level ? $scope.athlete.synchro_level : '0';
@@ -18,29 +16,16 @@ App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstan
 
         $scope.levels = LEVELS;
 
-        if (!$scope.athlete.$fromServer) {
-            $scope.title = 'Add an Athlete';
-        } else {
-            $scope.title = 'Edit ' + $scope.athlete.first_name + ' ' + $scope.athlete.last_name;
-        }
+        $scope.title = title;
 
-        $scope.save = function(isValid) {
+        $scope.save = function() {
+            console.log($scope.athlete);
 
-            if (isValid) {
+            AthleteFactory.save($scope.athlete).then(function(athlete) {
+                delete $scope.error;
 
-                $scope.athlete.put().then(function(response) {
-                    delete $scope.error;
-                    $modalInstance.close($scope.athlete);
-
-                    console.log('response', response);
-                    $location.path('/athletes/' + response.id);
-                });
-
-                console.log($scope.athlete);
-            } else {
-                alert('form is invalid');
-                console.log(isValid);
-            }
+                $modalInstance.close(athlete);
+            });
         };
 
         $scope.cancel = function() {

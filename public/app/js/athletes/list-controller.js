@@ -1,27 +1,18 @@
-App.Controllers.controller('AthleteListController', ['$scope', '$window', 'AthleteService', 'Restangular',
-    function($scope, $window, AthleteService, Restangular) {
+'use strict'
 
-        $scope.levelLabel = AthleteService.levelLabel;
+App.Controllers.controller('AthleteListController', ['$scope', '$window', 'Restangular', 'AthleteFactory',
+    function($scope, $window, Restangular, AthleteFactory) {
 
-        $scope.allCompcards = true;
+        $scope.levelLabel = AthleteFactory.levelLabel;
 
-        AthleteService.findAll().then(function(athletes) {
+        $scope.athletes = AthleteFactory.athletes;
 
-            $scope.athletes = athletes;
-
-            _.each(athletes, function(athlete) {
-
-                athlete.compcard = true;
-            });
+        AthleteFactory.getAll().then(function(data) {
+            AthleteFactory.athletes = data;
+            $scope.athletes = AthleteFactory.athletes;
         });
 
-        $scope.delete = function(athlete) {
-            if (confirm('Are you sure you wish to delete this athlete?')) {
-                Restangular.one('athletes', athlete.id).remove().then(function() {
-                    $scope.athletes = _.without($scope.athletes, athlete);
-                });
-            }
-        };
+        $scope.delete = AthleteFactory.delete;
 
         $scope.selectAllCompcards = function() {
             _.each($scope.athletes, function(athlete) {
@@ -45,4 +36,4 @@ App.Controllers.controller('AthleteListController', ['$scope', '$window', 'Athle
             return count == 0;
         }
     }
-])
+]);

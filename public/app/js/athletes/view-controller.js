@@ -1,9 +1,9 @@
 'use strict'
 
-App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$stateParams', '$window', 'AthleteService', 'RoutineService', 'Restangular', 'ROUTINES',
-    function($scope, $modal, $stateParams, $window, AthleteService, RoutineService, Restangular, ROUTINES) {
+App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$stateParams', '$window', 'AthleteFactory', 'RoutineService', 'Restangular', 'ROUTINES',
+    function($scope, $modal, $stateParams, $window, AthleteFactory, RoutineService, Restangular, ROUTINES) {
 
-        $scope.levelLabel = AthleteService.levelLabel;
+        $scope.levelLabel = AthleteFactory.levelLabel;
 
         $scope.routines = [];
 
@@ -11,9 +11,14 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
 
         $scope.athlete = null;
 
-        $scope.athletes = AthleteService.findAll().$object;
+        $scope.athletes = AthleteFactory.athletes;
 
-        AthleteService.findOne($stateParams.athlete_id).then(function(athlete) {
+        AthleteFactory.getAll().then(function(data) {
+            AthleteFactory.athletes = data;
+            $scope.athletes = AthleteFactory.athletes;
+        });
+
+        AthleteFactory.getOne($stateParams.athlete_id).then(function(athlete) {
 
             $scope.athlete = athlete;
 
@@ -38,7 +43,7 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
 
         $scope.edit = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/athlete.html',
+                templateUrl: '/app/templates/modals/athlete.html',
                 controller: 'AthleteInstanceController',
                 resolve: athleteResolve
             });
@@ -68,8 +73,8 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
         var chooseRoutineModal = function(eventParams, specificRoutines) {
             return function() {
                 var modalInstance = $modal.open({
-                    templateUrl: '/app/views/modals/choose/' + eventParams.key + '.html',
-                    controller: 'AthleteChooseRoutineCtrl',
+                    templateUrl: '/app/templates/modals/choose/' + eventParams.key + '.html',
+                    controller: 'AthleteChooseRoutineController',
                     size: 'lg',
                     resolve: {
                         athlete: function() {

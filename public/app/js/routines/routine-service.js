@@ -1,7 +1,7 @@
 'use strict'
 
-App.Services.factory('RoutineService', ['Restangular', 'AthleteService',
-    function(Restangular, AthleteService) {
+App.Services.factory('RoutineService', ['Restangular', 'AthleteFactory',
+    function(Restangular, AthleteFactory) {
         return {
             all: function() {
                 return Restangular.all('routines').getList();

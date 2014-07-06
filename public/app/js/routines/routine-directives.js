@@ -5,7 +5,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/trampoline-routine.html',
+                templateUrl: '/app/templates/directives/trampoline-routine.html',
                 scope: {
                     routine: '='
                 }
@@ -16,7 +16,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/doublemini-pass.html',
+                templateUrl: '/app/templates/directives/doublemini-pass.html',
                 scope: {
                     pass: '='
                 }
@@ -27,7 +27,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/tumbling-pass.html',
+                templateUrl: '/app/templates/directives/tumbling-pass.html',
                 scope: {
                     pass: '='
                 }

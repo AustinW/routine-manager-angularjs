@@ -4,6 +4,7 @@ var App = App || {};
 
 App.Constants = angular.module('application.constants', []);
 App.Services = angular.module('application.services', []);
+App.Factories = angular.module('application.factories', []);
 App.Controllers = angular.module('application.controllers', []);
 App.Filters = angular.module('application.filters', []);
 App.Directives = angular.module('application.directives', []);
@@ -19,6 +20,7 @@ angular.module('application', [
 
     'application.filters',
     'application.services',
+    'application.factories',
     'application.directives',
     'application.constants',
     'application.controllers'

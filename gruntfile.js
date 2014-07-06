@@ -351,6 +351,7 @@ module.exports = function(grunt) {
             files: [
                 '<%= assetsDir %>/less/**/*.less',
                 '<%= appDir %>/**/*.js',
+                'public/app/templates/**/*.html',
                 'gruntfile.js',
                 'app/views/index.php'
             ],

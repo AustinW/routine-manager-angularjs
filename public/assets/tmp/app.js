@@ -4,6 +4,7 @@ var App = App || {};
 
 App.Constants = angular.module('application.constants', []);
 App.Services = angular.module('application.services', []);
+App.Factories = angular.module('application.factories', []);
 App.Controllers = angular.module('application.controllers', []);
 App.Filters = angular.module('application.filters', []);
 App.Directives = angular.module('application.directives', []);
@@ -19,6 +20,7 @@ angular.module('application', [
 
     'application.filters',
     'application.services',
+    'application.factories',
     'application.directives',
     'application.constants',
     'application.controllers'
@@ -249,16 +251,28 @@ App.Controllers.controller('ApplicationController', ['$scope', '$rootScope', 'US
 App.Constants.constant('configuration', {
     ITEMS_URL: 'menu/items.json'
 });
-// Source: public/app/js/athletes/athlete-service.js
-App.Services.factory('AthleteService', ['Restangular', 'LEVELS',
+// Source: public/app/js/athletes/athlete-factory.js
+App.Factories.factory('AthleteFactory', ['Restangular', 'LEVELS',
     function(Restangular, LEVELS) {
-        return {
-            findAll: function() {
-                return Restangular.all('athletes').getList();
-            },
-            findOne: function(id) {
+
+        var AthleteFactory = {
+            athletes: [],
+
+            getOne: function(id) {
                 return Restangular.one('athletes', id).get();
             },
+
+            getAll: function() {
+                return Restangular.all('athletes').getList().then(function (athletesData) {
+
+                    angular.forEach(athletesData, function(athlete) {
+                        athlete.compcard = true;
+                    });
+
+                    return athletesData;
+                });
+            },
+
             levelLabel: function(level) {
                 for (var i = 0, s = LEVELS.length; i < s; ++i) {
                     if (LEVELS[i].key === level) {
@@ -267,17 +281,33 @@ App.Services.factory('AthleteService', ['Restangular', 'LEVELS',
                 }
 
                 return "";
+            },
+
+            save: function(athlete) {
+                athlete.put().then(function(response) {
+                    console.log(response);
+                    return response;
+                })
+            },
+
+            delete: function(athlete) {
+                if (confirm('Are you sure you wish to delete this athlete?')) {
+                    Restangular.one('athletes', athlete.id).remove().then(function() {
+                        AthleteFactory.athletes = _.without(AthleteFactory.athletes, athlete);
+                    });
+                }
             }
         };
-    }
-]);
+
+        return AthleteFactory;
+
+    }]
+);
 // Source: public/app/js/athletes/instance-controller.js
-App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstance', '$location', 'Restangular', 'athlete', 'LEVELS', 'AthleteService',
-    function($scope, $modalInstance, $location, Restangular, originalAthlete, LEVELS, AthleteService) {
+App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstance', '$location', 'Restangular', 'athlete', 'title', 'LEVELS', 'AthleteFactory',
+    function($scope, $modalInstance, $location, Restangular, originalAthlete, title, LEVELS, AthleteFactory) {
 
         $scope.athlete = Restangular.copy(originalAthlete);
-
-        console.log('Athlete: ', $scope.athlete);
 
         $scope.athlete.trampoline_level = $scope.athlete.trampoline_level ? $scope.athlete.trampoline_level : '0';
         $scope.athlete.synchro_level = $scope.athlete.synchro_level ? $scope.athlete.synchro_level : '0';
@@ -290,29 +320,16 @@ App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstan
 
         $scope.levels = LEVELS;
 
-        if (!$scope.athlete.$fromServer) {
-            $scope.title = 'Add an Athlete';
-        } else {
-            $scope.title = 'Edit ' + $scope.athlete.first_name + ' ' + $scope.athlete.last_name;
-        }
+        $scope.title = title;
 
-        $scope.save = function(isValid) {
+        $scope.save = function() {
+            console.log($scope.athlete);
 
-            if (isValid) {
+            AthleteFactory.save($scope.athlete).then(function(athlete) {
+                delete $scope.error;
 
-                $scope.athlete.put().then(function(response) {
-                    delete $scope.error;
-                    $modalInstance.close($scope.athlete);
-
-                    console.log('response', response);
-                    $location.path('/athletes/' + response.id);
-                });
-
-                console.log($scope.athlete);
-            } else {
-                alert('form is invalid');
-                console.log(isValid);
-            }
+                $modalInstance.close(athlete);
+            });
         };
 
         $scope.cancel = function() {
@@ -321,30 +338,19 @@ App.Controllers.controller('AthleteInstanceController', ['$scope', '$modalInstan
     }
 ])
 // Source: public/app/js/athletes/list-controller.js
-App.Controllers.controller('AthleteListController', ['$scope', '$window', 'AthleteService', 'Restangular',
-    function($scope, $window, AthleteService, Restangular) {
+App.Controllers.controller('AthleteListController', ['$scope', '$window', 'Restangular', 'AthleteFactory',
+    function($scope, $window, Restangular, AthleteFactory) {
 
-        $scope.levelLabel = AthleteService.levelLabel;
+        $scope.levelLabel = AthleteFactory.levelLabel;
 
-        $scope.allCompcards = true;
+        $scope.athletes = AthleteFactory.athletes;
 
-        AthleteService.findAll().then(function(athletes) {
-
-            $scope.athletes = athletes;
-
-            _.each(athletes, function(athlete) {
-
-                athlete.compcard = true;
-            });
+        AthleteFactory.getAll().then(function(data) {
+            AthleteFactory.athletes = data;
+            $scope.athletes = AthleteFactory.athletes;
         });
 
-        $scope.delete = function(athlete) {
-            if (confirm('Are you sure you wish to delete this athlete?')) {
-                Restangular.one('athletes', athlete.id).remove().then(function() {
-                    $scope.athletes = _.without($scope.athletes, athlete);
-                });
-            }
-        };
+        $scope.delete = AthleteFactory.delete;
 
         $scope.selectAllCompcards = function() {
             _.each($scope.athletes, function(athlete) {
@@ -368,23 +374,24 @@ App.Controllers.controller('AthleteListController', ['$scope', '$window', 'Athle
             return count == 0;
         }
     }
-])
+]);
 // Source: public/app/js/athletes/new-controller.js
 App.Controllers.controller('AthleteNewController', ['$scope', '$modal', 'Restangular', 'LEVELS',
     function($scope, $modal, Restangular, LEVELS) {
 
         $scope.athlete = {};
 
-        $scope.title = $scope.athlete.hasOwnProperty('first_name') ? 'Edit Athlete' : 'Add an athlete';
-
         $scope.open = function() {
 
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/athlete.html',
+                templateUrl: '/app/templates/modals/athlete.html',
                 controller: 'AthleteInstanceController',
                 resolve: {
                     athlete: function() {
                         return $scope.athlete;
+                    },
+                    title: function() {
+                        return ($scope.athlete.hasOwnProperty('first_name')) ? 'Edit Athlete' : 'Add an athlete';
                     }
                 }
             });
@@ -392,10 +399,10 @@ App.Controllers.controller('AthleteNewController', ['$scope', '$modal', 'Restang
     }
 ])
 // Source: public/app/js/athletes/view-controller.js
-App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$stateParams', '$window', 'AthleteService', 'RoutineService', 'Restangular', 'ROUTINES',
-    function($scope, $modal, $stateParams, $window, AthleteService, RoutineService, Restangular, ROUTINES) {
+App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$stateParams', '$window', 'AthleteFactory', 'RoutineService', 'Restangular', 'ROUTINES',
+    function($scope, $modal, $stateParams, $window, AthleteFactory, RoutineService, Restangular, ROUTINES) {
 
-        $scope.levelLabel = AthleteService.levelLabel;
+        $scope.levelLabel = AthleteFactory.levelLabel;
 
         $scope.routines = [];
 
@@ -403,9 +410,14 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
 
         $scope.athlete = null;
 
-        $scope.athletes = AthleteService.findAll().$object;
+        $scope.athletes = AthleteFactory.athletes;
 
-        AthleteService.findOne($stateParams.athlete_id).then(function(athlete) {
+        AthleteFactory.getAll().then(function(data) {
+            AthleteFactory.athletes = data;
+            $scope.athletes = AthleteFactory.athletes;
+        });
+
+        AthleteFactory.getOne($stateParams.athlete_id).then(function(athlete) {
 
             $scope.athlete = athlete;
 
@@ -430,7 +442,7 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
 
         $scope.edit = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/athlete.html',
+                templateUrl: '/app/templates/modals/athlete.html',
                 controller: 'AthleteInstanceController',
                 resolve: athleteResolve
             });
@@ -460,8 +472,8 @@ App.Controllers.controller('AthleteViewController', ['$scope', '$modal', '$state
         var chooseRoutineModal = function(eventParams, specificRoutines) {
             return function() {
                 var modalInstance = $modal.open({
-                    templateUrl: '/app/views/modals/choose/' + eventParams.key + '.html',
-                    controller: 'AthleteChooseRoutineCtrl',
+                    templateUrl: '/app/templates/modals/choose/' + eventParams.key + '.html',
+                    controller: 'AthleteChooseRoutineController',
                     size: 'lg',
                     resolve: {
                         athlete: function() {
@@ -646,11 +658,11 @@ App.Controllers.controller('AthleteChooseRoutineController', [
     'Restangular',
     'athlete',
     'routines',
-    'AthleteService',
+    'AthleteFactory',
     'selectedRoutines',
     'theEvent',
 
-    function($scope, $modalInstance, $filter, $q, Restangular, originalAthlete, routines, AthleteService, selectedRoutines, theEvent) {
+    function($scope, $modalInstance, $filter, $q, Restangular, originalAthlete, routines, AthleteFactory, selectedRoutines, theEvent) {
 
         $scope.athlete = originalAthlete;
 
@@ -725,7 +737,7 @@ App.Controllers.controller('RoutineNewController', ['$scope', '$modal', 'Restang
     function($scope, $modal, Restangular) {
         $scope.openTrampoline = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/routine/trampoline.html',
+                templateUrl: '/app/templates/modals/routine/trampoline.html',
                 controller: 'RoutineNewInstanceController',
                 resolve: {
                     event: function() {
@@ -770,7 +782,7 @@ App.Controllers.controller('RoutineNewController', ['$scope', '$modal', 'Restang
 
         $scope.openDoubleMini = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/routine/doublemini.html',
+                templateUrl: '/app/templates/modals/routine/doublemini.html',
                 controller: 'RoutineNewInstanceController',
                 resolve: {
                     event: function() {
@@ -909,7 +921,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/trampoline-routine.html',
+                templateUrl: '/app/templates/directives/trampoline-routine.html',
                 scope: {
                     routine: '='
                 }
@@ -920,7 +932,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/doublemini-pass.html',
+                templateUrl: '/app/templates/directives/doublemini-pass.html',
                 scope: {
                     pass: '='
                 }
@@ -931,7 +943,7 @@ App.Directives
 
         function() {
             return {
-                templateUrl: '/app/views/directives/tumbling-pass.html',
+                templateUrl: '/app/templates/directives/tumbling-pass.html',
                 scope: {
                     pass: '='
                 }
@@ -939,8 +951,8 @@ App.Directives
         }
     ]);
 // Source: public/app/js/routines/routine-service.js
-App.Services.factory('RoutineService', ['Restangular', 'AthleteService',
-    function(Restangular, AthleteService) {
+App.Services.factory('RoutineService', ['Restangular', 'AthleteFactory',
+    function(Restangular, AthleteFactory) {
         return {
             all: function() {
                 return Restangular.all('routines').getList();

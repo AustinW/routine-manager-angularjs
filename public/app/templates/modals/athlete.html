@@ -1,4 +1,4 @@
-<form class="form-horizontal" role="form" name="athleteForm" ng-submit="save(athleteForm.$valid)" novalidate>
+<form class="form-horizontal" role="form" name="athleteForm" ng-submit="save()" novalidate>
     <div class="modal-header">
         <h3>{{ title }}</h3>
     </div>
@@ -36,6 +36,14 @@
                 <input type="date" placeholder="yyyy-mm-dd" id="birthday" name="birthday" class="form-control" ng-model="athlete.birthday" required>
 
                 <p ng-show="athleteForm.birthday.$invalid && !athleteForm.birthday.$pristine" class="help-block">Athlete's birthday is required and must be a valid date (yyyy-mm-dd).</p>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error' : athleteForm.usag_id.$invalid && athleteForm.usag_id.$dirty }">
+            <!-- Gym USAG Number -->
+            <label class="col-sm-4 control-label"  for="usag_id">USAG #</label>
+            <div class="col-sm-8">
+                <input type="number" ng-model="athlete.usag_id" id="usag_id" name="usag_id" class="form-control" ng-pattern="/^\d{6}$/" required>
+                <p ng-show="athleteForm.usag_id.$dirty && athleteForm.usag_id.$invalid" class="help-block">Please provide the athlete's usag number (6 digits)</p>
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error' : athleteForm.team.$invalid && !athleteForm.team.$pristine }">

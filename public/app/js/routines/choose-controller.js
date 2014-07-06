@@ -8,11 +8,11 @@ App.Controllers.controller('AthleteChooseRoutineController', [
     'Restangular',
     'athlete',
     'routines',
-    'AthleteService',
+    'AthleteFactory',
     'selectedRoutines',
     'theEvent',
 
-    function($scope, $modalInstance, $filter, $q, Restangular, originalAthlete, routines, AthleteService, selectedRoutines, theEvent) {
+    function($scope, $modalInstance, $filter, $q, Restangular, originalAthlete, routines, AthleteFactory, selectedRoutines, theEvent) {
 
         $scope.athlete = originalAthlete;
 

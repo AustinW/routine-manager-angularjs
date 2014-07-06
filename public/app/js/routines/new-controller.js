@@ -4,7 +4,7 @@ App.Controllers.controller('RoutineNewController', ['$scope', '$modal', 'Restang
     function($scope, $modal, Restangular) {
         $scope.openTrampoline = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/routine/trampoline.html',
+                templateUrl: '/app/templates/modals/routine/trampoline.html',
                 controller: 'RoutineNewInstanceController',
                 resolve: {
                     event: function() {
@@ -49,7 +49,7 @@ App.Controllers.controller('RoutineNewController', ['$scope', '$modal', 'Restang
 
         $scope.openDoubleMini = function() {
             var modalInstance = $modal.open({
-                templateUrl: '/app/views/modals/routine/doublemini.html',
+                templateUrl: '/app/templates/modals/routine/doublemini.html',
                 controller: 'RoutineNewInstanceController',
                 resolve: {
                     event: function() {
