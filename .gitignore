@@ -1,8 +1,6 @@
 # Laravel
 /bootstrap/compiled.php
 /vendor
-composer.phar
-composer.lock
 
 # Mac OSX
 .DS_Store
