@@ -17,9 +17,9 @@ App::error(function(Exception $exception, $code)
 {
 	if (App::environment('production')) {
 		return Response::apiExceptionError($exception, $code);
-	} else {
-		Log::error($exception);
 	}
+
+	Log::error($exception);
 });
 
 // App::missing(function($exception)
