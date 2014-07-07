@@ -15,10 +15,10 @@
 
 App::error(function(Exception $exception, $code)
 {
+	Log::error($exception);
+
 	if (App::environment('production')) {
 		return Response::apiExceptionError($exception, $code);
-	} else {
-		Log::error($exception);
 	}
 });
 

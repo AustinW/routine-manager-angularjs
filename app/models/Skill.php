@@ -1,6 +1,6 @@
 <?php
 
-class Skill extends BaseModel
+class Skill extends \BaseModel
 {
 
     protected $guarded = [];

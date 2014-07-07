@@ -49,7 +49,7 @@ class Routine extends \BaseModel
     {
     	parent::__construct();
 
-    	$this->skillRepository = App::make('skill');
+    	$this->skillRepository = App::make('Skill');
     }
 
 	/*

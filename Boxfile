@@ -24,7 +24,7 @@ web1:
     - app/storage/pdf
     - app/public/compcards
   after_build:
-    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-source"
+    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist"
     - "php artisan dump-autoload"
   before_deploy:
     - "php artisan migrate"
@@ -34,6 +34,3 @@ web1:
     - "rm -f app/storage/views/*"
 cache1:
   type: redis
-db1:
-  name: routine_manager
-  type: mysql
