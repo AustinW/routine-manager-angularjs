@@ -22,7 +22,7 @@ web1:
     - app/storage/views
     - app/storage/tmp
     - app/storage/pdf
-    - app/public/compcards
+    - public/compcards
   after_build:
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist"
     - "php artisan dump-autoload"
