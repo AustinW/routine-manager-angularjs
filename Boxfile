@@ -23,6 +23,7 @@ web1:
     - app/storage/tmp
     - app/storage/pdf
     - public/compcards
+    - app/bin/pdftk/usr/bin
   after_build:
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist"
     - "export PATH=app/bin/pdftk/usr/bin:$PATH;"
