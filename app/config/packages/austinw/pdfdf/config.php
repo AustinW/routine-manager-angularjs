@@ -12,7 +12,7 @@
 return array(
     'pdftk' => (App::environment('local'))
     	? 'pdftk'
-    	: app_path() . 'bin/pdftk/usr/bin/pdftk',
+    	: app_path() . '/bin/pdftk/usr/bin/pdftk',
 
     'storage' => array(
     	'tmp' => storage_path() . DIRECTORY_SEPARATOR . 'tmp',
