@@ -25,7 +25,7 @@ web1:
     - public/compcards
   after_build:
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist"
-    - "export LD_LIBRARY_PATH=app/bin/pdftk:$LD_LIBRARY_PATH;"
+    - "export LD_LIBRARY_PATH=app/bin/pdftk/usr/lib:$LD_LIBRARY_PATH;"
     - "chmod +x app/bin/pdftk/usr/bin/pdftk"
     - "php artisan dump-autoload"
   before_deploy:
