@@ -28,6 +28,7 @@
     "ie-html5": "aFarkas/html5shiv",
     "ng-table": "esvit/ng-table",
     "angular-flash": "~0.1.13",
-    "restangular": "~1.3.1"
+    "restangular": "~1.3.1",
+    "angular-xeditable": "~0.1.8"
   }
 }
