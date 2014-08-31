@@ -25,11 +25,13 @@ web1:
     - public/compcards
     - app/bin/pdftk/usr/bin
   after_build:
-    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist"
-    - "sudo apt-get install pdftk"
-    - "export PATH=app/bin/pdftk/usr/bin:$PATH;"
-    - "export LD_LIBRARY_PATH=app/bin/pdftk/usr/lib:$LD_LIBRARY_PATH;"
-    - "chmod +x app/bin/pdftk/usr/bin/pdftk"
+    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install --prefer-dist --quiet"
+    - "uname -a"
+    - "wget http://mirror.centos.org/centos/6/os/i386/Packages/yum-3.2.29-40.el6.centos.noarch.rpm"
+    - "rpm -ivh yum-3.2.29-40.el6.centos.noarch.rpm –"
+    # - "export PATH=app/bin/pdftk/usr/bin:$PATH;"
+    # - "export LD_LIBRARY_PATH=app/bin/pdftk/usr/lib:$LD_LIBRARY_PATH;"
+    # - "chmod +x app/bin/pdftk/usr/bin/pdftk"
     - "php artisan dump-autoload"
   before_deploy:
     - "php artisan migrate"
