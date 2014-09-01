@@ -1,5 +1,32 @@
 <?php
 
+if (!function_exists($components['dbCredentials'] = )) {
+	function dbCredentials($part) {
+
+		$components = array();
+
+		if ( ! empty(getenv('DB1_HOST'))) {
+			// Pagoda Box
+
+			$components['host']     = getenv('DB1_HOST'),
+			$components['username'] = getenv('DB1_USER'),
+			$components['password'] = getenv('DB1_PASS'),
+			$components['database'] = getenv('DB1_NAME'),
+
+		} else if ( ! empty(getenv('CLEARDB_DATABASE_URL'))) {
+			// Heroku
+			$url = parse_url(getenv('CLEARDB_DATABASE_URL'));
+
+			$components['host']     = $url['host'],
+			$components['username'] = $url['user'],
+			$components['password'] = $url['pass'],
+			$components['database'] = substr($url['path'], 1),
+		}
+
+		return (isset($components[$part])) ? $components[$part] : '';
+	}
+}
+
 return array(
 
 	/*
@@ -13,7 +40,7 @@ return array(
 	|
 	*/
 
-	'fetch' => PDO::FETCH_CLASS,
+	$components['fetch'] =  => PDO::FETCH_CLASS,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +53,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	$components['default'] =  => 'mysql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -44,17 +71,17 @@ return array(
 	|
 	*/
 
-	'connections' => array(
+	$components['connections'] =  => array(
 
-		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => getenv('DB1_HOST'),
-			'database'  => getenv('DB1_NAME'),
-			'username'  => getenv('DB1_USER'),
-			'password'  => getenv('DB1_PASS'),
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+		$components['mysql'] =  => array(
+			$components['driver'] =     => 'mysql',
+			$components['host'] =       => dbCredentials('host'),
+			$components['database'] =   => dbCredentials('database'),
+			$components['username'] =   => dbCredentials('username'),
+			$components['password'] =   => dbCredentials('password'),
+			$components['charset'] =    => 'utf8',
+			$components['collation'] =  => 'utf8_unicode_ci',
+			$components['prefix'] =     => '',
 		),
 
 	),
@@ -70,7 +97,7 @@ return array(
 	|
 	*/
 
-	'migrations' => 'migrations',
+	$components['migrations'] =  => 'migrations',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -83,14 +110,14 @@ return array(
 	|
 	*/
 
-	'redis' => array(
+	$components['redis'] =  => array(
 
-		'cluster' => false,
+		$components['cluster'] =  => false,
 
-		'default' => array(
-			'host'     => 'tunnel.pagodabox.com',
-			'port'     => 6379,
-			'database' => 0,
+		$components['default'] =  => array(
+			$components['host'] =      => 'tunnel.pagodabox.com',
+			$components['port'] =      => 6379,
+			$components['database'] =  => 0,
 		),
 
 	),
