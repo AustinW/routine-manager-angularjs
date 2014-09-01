@@ -10,7 +10,7 @@
     }],
     "require": {
         "laravel/framework": "4.1.*",
-        "laravelbook/ardent": "dev-master",
+        
         "zizaco/entrust": "dev-master",
         "j20/php-uuid": "dev-master",
         "Chumper/Zipper": "dev-master",
@@ -20,7 +20,8 @@
     "require-dev": {
         "way/generators": "dev-master",
         "mockery/mockery": "dev-master@dev",
-        "barryvdh/laravel-ide-helper": "dev-master"
+        "barryvdh/laravel-ide-helper": "dev-master",
+        "heroku/heroku-buildpack-php": "*"
     },
     "autoload": {
         "classmap": [

@@ -114,7 +114,7 @@ return array(
 		'Tappleby\AuthToken\AuthTokenServiceProvider',
 
 		/*** Additional Providers ***/
-		'Zizaco\Entrust\EntrustServiceProvider', // Entrust Provider for roles
+		// 'Zizaco\Entrust\EntrustServiceProvider', // Entrust Provider for roles
 
 		/* Uncomment for use in development */
 		//'Way\Generators\GeneratorsServiceProvider', // Generators
@@ -192,7 +192,7 @@ return array(
 		'AuthTokenNotAuthorizedException' => 'Tappleby\AuthToken\Exceptions\NotAuthorizedException',
 
 		/*** Additional Aliases ***/
-		'Entrust' => 'Zizaco\Entrust\EntrustFacade', // Entrust Alias
+		// 'Entrust' => 'Zizaco\Entrust\EntrustFacade', // Entrust Alias
 	),
 
 	'compcards' => array(
