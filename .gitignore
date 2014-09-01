@@ -1,7 +1,6 @@
 # Laravel
 /bootstrap/compiled.php
 /vendor
-composer.phar
 
 # Mac OSX
 .DS_Store
