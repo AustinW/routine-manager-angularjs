@@ -1,16 +1,19 @@
 # Laravel
 /bootstrap/compiled.php
-/vendor/*
+/vendor
+composer.phar
 
 # Mac OSX
 .DS_Store
 
 # IDE
-.idea/*
+.idea
 
 # NPM & Bower
 /node_modules
 /public/vendor
+.sass-cache
+/client/compiled
 
 # Application
 app/storage/tmp/*
