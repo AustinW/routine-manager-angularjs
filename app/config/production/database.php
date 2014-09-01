@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists($components['dbCredentials'] = )) {
+if ( ! function_exists('dbCredentials')) {
 	function dbCredentials($part) {
 
 		$components = array();
@@ -8,19 +8,19 @@ if (!function_exists($components['dbCredentials'] = )) {
 		if ( ! empty(getenv('DB1_HOST'))) {
 			// Pagoda Box
 
-			$components['host']     = getenv('DB1_HOST'),
-			$components['username'] = getenv('DB1_USER'),
-			$components['password'] = getenv('DB1_PASS'),
-			$components['database'] = getenv('DB1_NAME'),
+			$components['host']     = getenv('DB1_HOST');
+			$components['username'] = getenv('DB1_USER');
+			$components['password'] = getenv('DB1_PASS');
+			$components['database'] = getenv('DB1_NAME');
 
 		} else if ( ! empty(getenv('CLEARDB_DATABASE_URL'))) {
 			// Heroku
 			$url = parse_url(getenv('CLEARDB_DATABASE_URL'));
 
-			$components['host']     = $url['host'],
-			$components['username'] = $url['user'],
-			$components['password'] = $url['pass'],
-			$components['database'] = substr($url['path'], 1),
+			$components['host']     = $url['host'];
+			$components['username'] = $url['user'];
+			$components['password'] = $url['pass'];
+			$components['database'] = substr($url['path'], 1);
 		}
 
 		return (isset($components[$part])) ? $components[$part] : '';
