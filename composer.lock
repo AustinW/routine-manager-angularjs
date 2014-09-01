@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "85ed4d3ba59ae3975fd645e921aea663",
+    "hash": "122d06c4f1a20dbbb288078086865802",
     "packages": [
         {
             "name": "austinw/pdfdf",
