@@ -15,13 +15,13 @@
         "j20/php-uuid": "dev-master",
         "Chumper/Zipper": "dev-master",
         "tappleby/laravel-auth-token": "0.2.x",
-        "austinw/pdfdf": "dev-master"
+        "austinw/pdfdf": "dev-master",
+        "heroku/heroku-buildpack-php": "*"
     },
     "require-dev": {
         "way/generators": "dev-master",
         "mockery/mockery": "dev-master@dev",
-        "barryvdh/laravel-ide-helper": "dev-master",
-        "heroku/heroku-buildpack-php": "*"
+        "barryvdh/laravel-ide-helper": "dev-master"
     },
     "autoload": {
         "classmap": [
