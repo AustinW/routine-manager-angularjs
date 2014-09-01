@@ -40,7 +40,7 @@ return array(
 	|
 	*/
 
-	$components['fetch'] =  => PDO::FETCH_CLASS,
+	'fetch' => PDO::FETCH_CLASS,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -53,7 +53,7 @@ return array(
 	|
 	*/
 
-	$components['default'] =  => 'mysql',
+	'default' => 'mysql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -71,17 +71,17 @@ return array(
 	|
 	*/
 
-	$components['connections'] =  => array(
+	'connections' => array(
 
-		$components['mysql'] =  => array(
-			$components['driver'] =     => 'mysql',
-			$components['host'] =       => dbCredentials('host'),
-			$components['database'] =   => dbCredentials('database'),
-			$components['username'] =   => dbCredentials('username'),
-			$components['password'] =   => dbCredentials('password'),
-			$components['charset'] =    => 'utf8',
-			$components['collation'] =  => 'utf8_unicode_ci',
-			$components['prefix'] =     => '',
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => dbCredentials('host'),
+			'database'  => dbCredentials('database'),
+			'username'  => dbCredentials('username'),
+			'password'  => dbCredentials('password'),
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
 		),
 
 	),
@@ -97,7 +97,7 @@ return array(
 	|
 	*/
 
-	$components['migrations'] =  => 'migrations',
+	'migrations' => 'migrations',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -110,14 +110,14 @@ return array(
 	|
 	*/
 
-	$components['redis'] =  => array(
+	'redis' => array(
 
-		$components['cluster'] =  => false,
+		'cluster' => false,
 
-		$components['default'] =  => array(
-			$components['host'] =      => 'tunnel.pagodabox.com',
-			$components['port'] =      => 6379,
-			$components['database'] =  => 0,
+		'default' => array(
+			'host'     => 'tunnel.pagodabox.com',
+			'port'     => 6379,
+			'database' => 0,
 		),
 
 	),
