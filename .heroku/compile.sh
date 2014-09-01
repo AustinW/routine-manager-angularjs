@@ -9,4 +9,6 @@ APP_DIR="$( dirname "${REPO_DIR}" )"
 
 cd $REPO_DIR
 
+alias php=php5-fpm
+
 # $APP_DIR/bin/php artisan migrate --env=production
