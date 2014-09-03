@@ -1,7 +1,7 @@
 <?php
 
 if ( ! function_exists('dbCredentials')) {
-	function dbCredentials($part) {
+	function dbCredentials($part, $default = false) {
 
 		$components = array();
 
@@ -21,9 +21,19 @@ if ( ! function_exists('dbCredentials')) {
 			$components['username'] = $url['user'];
 			$components['password'] = $url['pass'];
 			$components['database'] = substr($url['path'], 1);
+
+		} else if ( isset($_SERVER['RDS_HOSTNAME'])) {
+			// Amazon AWS
+
+			$components['host']     = $_SERVER['RDS_HOSTNAME'];
+			$components['port']     = $_SERVER['RDS_PORT'];
+			$components['database'] = $_SERVER['RDS_DB_NAME'];
+			$components['username'] = $_SERVER['RDS_USERNAME'];
+			$components['password'] = $_SERVER['RDS_PASSWORD'];
+
 		}
 
-		return (isset($components[$part])) ? $components[$part] : '';
+		return (isset($components[$part])) ? $components[$part] : $default;
 	}
 }
 
@@ -76,6 +86,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => dbCredentials('host'),
+			'port'      => dbCredentials('port', 3306),
 			'database'  => dbCredentials('database'),
 			'username'  => dbCredentials('username'),
 			'password'  => dbCredentials('password'),
